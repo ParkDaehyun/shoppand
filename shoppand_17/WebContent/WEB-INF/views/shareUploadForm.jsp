@@ -2,7 +2,7 @@
     pageEncoding="EUC-KR"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.Date, java.text.SimpleDateFormat"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 	<head>
         <meta charset="utf-8">
@@ -95,7 +95,12 @@
 	         </button>
 	    	</div>
         	<div class="text no-animate" style="height:80%; width:60%;  margin-left:-12%; position:absolute;">
-	            <div class="col-md-10" style="margin-left:10%; width:80%; height:80%;" >
+        	
+        		<div></div>
+        		<div></div><!-- 
+        		<canvas id = "frameCan" width="200px" height = "200px"></canvas> -->
+	            <div id="shareImg" style="margin-left:20%; width:60%; height:80%; " >
+	            	
 	                <img id="blah" src="#" alt="your image" style="width:100%; height:100%;"/>
 	            </div>
 	            <input type="file" name="profileImg" id="imgInp">
@@ -160,6 +165,10 @@
 		});
 	});
 	
+	$("#shareImg").click(function(e){
+		console.log(parseInt(e.clientX) - $("#shareImg").offset().left);
+		console.log(parseInt(e.clientY) - $("#shareImg").offset().top);
+	});
 	
 	
 	/* 
