@@ -24,7 +24,10 @@ public class Shares {
 	
 	@Column
 	private String writer;
-		
+	
+	@Column
+	private String title;
+	
 	@Column
 	private String writingDate;
 	
@@ -56,6 +59,14 @@ public class Shares {
 
 	public void setWriter(String writer) {
 		this.writer = writer;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getWritingDate() {

@@ -80,10 +80,10 @@ public class GroupController {
 		System.out.println(groupname);
 		System.out.println(groupService.findGroup(groupname).getGroupMembers());
 		System.out.println(mem.getMemberGroups());
-		if(mem instanceof Members){
+		if(mem instanceof Members){/*
 			groupService.findGroup(groupname).addGroupMember(mem);
 			System.out.println(mem.getMemberGroups());
-			System.out.println(groupService.findGroup(groupname).getGroupMembers());
+			System.out.println(groupService.findGroup(groupname).getGroupMembers());*/
 			
 		}else{
 			msg = "2";
@@ -97,7 +97,10 @@ public class GroupController {
 		String msg = "1";
 		if(memberService.findMember(addmail) instanceof Members){
 			try{
+				System.out.println(addmail+"dip");
 				groupService.getGroup(groupId).addGroupMember(memberService.findMember(addmail));
+				groupService.updateGroup(groupService.getGroup(groupId));
+				memberService.updateMember(memberService.findMember(addmail));
 			}catch(Exception e){
 				msg = "2";
 			}
@@ -110,7 +113,10 @@ public class GroupController {
 	@RequestMapping(value = "/groupshare.do", method = RequestMethod.GET)
 	public ModelAndView groupShare(@RequestParam String groupId){
 		System.out.println(Long.parseLong(groupId));
-		
-		return new ModelAndView("groupShare", "shares", groupService.getGroup(Long.parseLong(groupId)).getShares());		
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("shares", groupService.getGroup(Long.parseLong(groupId)).getShares());
+		mv.addObject("group", groupService.getGroup(Long.parseLong(groupId)));
+		mv.setViewName("groupShare");
+		return mv;
 	}
 }

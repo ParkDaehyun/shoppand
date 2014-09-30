@@ -1,30 +1,27 @@
 package com.pdh.shoppand_17.model.entity;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.IndexColumn;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @Entity
 @Table(name = "Groups")
 public class Groups {
+
 	
 	@Id
 	@Column
@@ -112,16 +109,16 @@ public class Groups {
 	}*/
 	
 	public void addGroupMember(Members member){
-		groupMembers.add(member);
+		this.groupMembers.add(member);
 		member.addGroup(this);
 	}
 
 	@Override
 	public String toString() {
 		return "Groups [groupId=" + groupId + ", founder=" + founder
-				+ ", groupName=" + groupName + ", groupDate=" + groupDate + "]";
+				+ ", groupName=" + groupName + ", groupDate=" + groupDate
+				+ ", groupMembers=" + groupMembers + ", shares=" + shares + "]";
 	}
+
 	
-	
-		
 }

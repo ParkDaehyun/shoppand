@@ -40,5 +40,8 @@ public class GroupService {
 			return groupRepository.findByGroupId(groupId);
 		}
 
+		public Groups updateGroup(Groups group) {
+			return groupRepository.save(group);
+		}
 
 }

@@ -125,10 +125,10 @@
 		
 		$("#idSearch").click(function(e){
 			$.ajax({
-				url : "chkGroupMember.do",
+				url : "addGroupMember.do",
 				type : "post",
 				dataType : "text",
-				data : "addmail="+$("#emailName").val() + "&groupname=${group.groupName}",
+				data : "addmail="+$("#emailName").val() + "&groupId=${group.groupId}",
 				success : function(data){
 					if(data == "1"){
 						alert($("#emailName").val()+"님이 등록되었습니다.");

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pdh.shoppand_17.model.entity.Members;
+import com.pdh.shoppand_17.service.GroupService;
 import com.pdh.shoppand_17.service.MemberService;
 //import com.pdh.shoppand_17.service.MemberService;
 
@@ -29,7 +30,8 @@ public class MemberController {
 		
 	@Autowired
 	private MemberService memberService;
-
+	@Autowired
+	private GroupService groupService;
 	
 	@RequestMapping(value = "/register.do" , method = RequestMethod.GET)
 	public ModelAndView registerForm(){
@@ -99,9 +101,13 @@ public class MemberController {
 		try{
 			memberService.login(email, password);
 			model.addAttribute("userInfo", memberService.findMember(email));
+			System.out.println(email);
+			System.out.println(memberService.findMember(email).getMemberGroups());
 			System.out.println(memberService.getGroups(email));
 			mv.addObject("grouplist", memberService.getGroups(email));
+			mv.addObject("groups",groupService.getAllGroups());
 		}catch(Exception e){
+			System.out.println("err");
 			url = "login";
 		}
 		mv.setViewName(url);

@@ -78,15 +78,16 @@
 		</div>		
 		<div class="parallax" style="background-image: url(images/bg1.jpg);">
 			<div class="text">
-				<h1>Blog</h1>
-				<p>Right sidebar</p>
+				<h1>${group.groupName}</h1>
+				<p>since ${group.groupDate}</p>
 			</div>
 		</div>
 		
 		<section class="text-block">
 			<div class="light-bg">
 				<div class="container">
-					<h2 class="with-border">Blog <small class="color">/ write something</small></h2>
+					<h2 class="with-border"> Shares <small class="color">/ write something</small><a class="btn pull-right" href="shareUploadForm.do">Post</a></h2>
+					
 					<div class="row-fluid">
 						<div class="span9">
 							<ul class="thumbnails">

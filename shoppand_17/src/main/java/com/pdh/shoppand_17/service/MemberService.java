@@ -33,10 +33,15 @@ public class MemberService {
 	}
 	
 	public Members findMember(String email){
+		System.out.println("findmem");
 		return memberRepository.findOne(email);
 	}
 	
 	public List<Groups> getGroups(String email){
 		return memberRepository.findByEmail(email).getMemberGroups();
+	}
+
+	public Members updateMember(Members findMember) {
+		return memberRepository.save(findMember);
 	}
 }

@@ -161,8 +161,18 @@ public class Members {
 
 	
 	public void addGroup(Groups group){
+		this.memberGroups.add(group);
 		System.out.println(group + "!");
-		memberGroups.add(group);
+		System.out.println(this);
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Members [email=" + email + ", password=" + password + ", name="
+				+ name + ", gender=" + gender + ", location=" + location
+				+ ", profileImg=" + profileImg + "]";
 	}
 	
 	
@@ -177,11 +187,5 @@ public class Members {
 		return userGroups;
 	}*/
 	
-	@Override
-	public String toString() {
-		return "MemberVO [email=" + email + ", password="
-				+ password + ", name=" + name + ", gender=" + gender
-				+ ", location=" + location + ", profileImg=" + profileImg + "]";
-	}
 	
 }
