@@ -1,12 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% request.setCharacterEncoding("utf-8"); %>
+<% response.setContentType("text/html; charset=utf-8"); %>
+<% String toDate = new java.text.SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new java.util.Date()); %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.Date, java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
-	<head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Griny - single & multi page theme</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,7 +27,7 @@
     </head>
     <body>
     
-    	<% String toDate = new java.text.SimpleDateFormat("yyyy.MM.dd     HH:mm:ss").format(new java.util.Date()); %>
+    	
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -90,27 +92,45 @@
 	        <form:input path="title" class="input-block-level" id="title" placeholder="Title"/>
 	        <form:hidden path="imgName" id="imgName"/>
 	    	<form:input path="info" class="input-block-level" id="info" placeholder="Comments" style="height:80%;"/>
-	    	<button type="button" id="shareSM" class="btn btn-large btn-block">
+	    	<button type="button" id="shareSM" class="btn btn-large btn-block" >
 	            Post
 	         </button>
 	    	</div>
-        	<div class="text no-animate" style="height:80%; width:60%;  margin-left:-12%; position:absolute;">
-        	
-        		<div></div>
-        		<div></div><!-- 
+        	<div id="shareImgForm" class="text no-animate" style="height:80%; width:60%;  margin-left:-12%; position:absolute; padding-left:10px; padding-right:10px;">
+        			<!-- 
         		<canvas id = "frameCan" width="200px" height = "200px"></canvas> -->
+        		
+        		<div id="shareImgbox"></div>
 	            <div id="shareImg" style="margin-left:20%; width:60%; height:80%; " >
-	            	
-	                <img id="blah" src="#" alt="your image" style="width:100%; height:100%;"/>
+	            	<img id="blah"  alt="Please upload your image" style="width:100%; height:100%;"/>
 	            </div>
-	            <input type="file" name="profileImg" id="imgInp">
-	                <button type="button" id="profileSM" class="btn btn-info">
-	                   Submit
-	               	</button>
+	            <input type="button" value="Search files" class="btn"/>
+	            <input type="file" name="profileImg" id="imgInp" style="font-size:30px; position:absolute; margin-left:-110px; width:50px; opacity:0;">
+	            <div id="taggedbox_1" style="position:absolute; top:10%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);"></div>
+	            <div id="taggedbox_2" style="position:absolute; top:10%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);"></div>
+	            <div id="taggedbox_3" style="position:absolute; top:55%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);"></div>
+	            <div id="taggedbox_4" style="position:absolute; top:55%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);"></div>
 	    	</div>
 	    	</form:form>
         </div>
-				
+		
+		<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>
+				<h3 id="myModalLabel">Modal header</h3>
+			</div>
+			<div class="modal-body">
+				<p>
+					<div id="resultSearch">
+					</div>
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button id="searchbtn" class="btn">Search</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button id="searchbtn" class="btn">Search</button>
+			</div>
+		</div>		
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
@@ -122,40 +142,41 @@
         <script src="js/main.js"></script>
     </body>
 <script>
-
+	var xpos;
+	var ypos;
+	var xrate;
+	var yrate;
+	var boxnum = 1;
 	
 	$(document).ready(function(){
 	    function readURL(input) {
 	        if (input.files && input.files[0]) {
-	            var reader = new FileReader(); //ÆÄÀÏÀ» ÀĞ±â À§ÇÑ FileReader°´Ã¼ »ı¼º
+	            var reader = new FileReader(); //íŒŒì¼ì„ ì½ê¸° ìœ„í•œ FileReaderê°ì²´ ìƒì„±
 	            reader.onload = function (e) { 
-	            //ÆÄÀÏ ÀĞ¾îµéÀÌ±â¸¦ ¼º°øÇßÀ»¶§ È£ÃâµÇ´Â ÀÌº¥Æ® ÇÚµé·¯
+	            //íŒŒì¼ ì½ì–´ë“¤ì´ê¸°ë¥¼ ì„±ê³µí–ˆì„ë•Œ í˜¸ì¶œë˜ëŠ” ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬
 	                $('#blah').attr('src', e.target.result);
-	                //ÀÌ¹ÌÁö TagÀÇ SRC¼Ó¼º¿¡ ÀĞ¾îµéÀÎ File³»¿ëÀ» ÁöÁ¤
-	                //(¾Æ·¡ ÄÚµå¿¡¼­ ÀĞ¾îµéÀÎ dataURLÇü½Ä)
+	                //ì´ë¯¸ì§€ Tagì˜ SRCì†ì„±ì— ì½ì–´ë“¤ì¸ Fileë‚´ìš©ì„ ì§€ì •
+	                //(ì•„ë˜ ì½”ë“œì—ì„œ ì½ì–´ë“¤ì¸ dataURLí˜•ì‹)
 	            };                   
 	            reader.readAsDataURL(input.files[0]);
-	            //File³»¿ëÀ» ÀĞ¾î dataURLÇü½ÄÀÇ ¹®ÀÚ¿­·Î ÀúÀå
+	            //Fileë‚´ìš©ì„ ì½ì–´ dataURLí˜•ì‹ì˜ ë¬¸ìì—´ë¡œ ì €ì¥
     	    }
 		}//readURL()--
 
-		//file ¾ç½ÄÀ¸·Î ÀÌ¹ÌÁö¸¦ ¼±ÅÃ(°ªÀÌ º¯°æ) µÇ¾úÀ»¶§ Ã³¸®ÇÏ´Â ÄÚµå
+		//file ì–‘ì‹ìœ¼ë¡œ ì´ë¯¸ì§€ë¥¼ ì„ íƒ(ê°’ì´ ë³€ê²½) ë˜ì—ˆì„ë•Œ ì²˜ë¦¬í•˜ëŠ” ì½”ë“œ
 		$("#imgInp").change(function(e){
-			alert(this.value); //¼±ÅÃÇÑ ÀÌ¹ÌÁö °æ·Î Ç¥½Ã
+			alert(this.value); //ì„ íƒí•œ ì´ë¯¸ì§€ ê²½ë¡œ í‘œì‹œ
 			readURL(this);
 			
 		});
 	});
 	
-	$("#profileSM").click(function (e) {
-		$("#profileSM").hide();
-	});
 	
 	$("#shareSM").click(function(e){
 		var form = $('#imgUp');
 		form.ajaxSubmit({
 			url: 'shareImgUp.do',
-			data: form.serialize(),  //ÆûÀÇ °ªµéÀ» ÁÖ¼ÒÈ­ÇÏ¿© º¸³»°Ô µË´Ï´Ù.
+			data: form.serialize(),  //í¼ì˜ ê°’ë“¤ì„ ì£¼ì†Œí™”í•˜ì—¬ ë³´ë‚´ê²Œ ë©ë‹ˆë‹¤.
 			type: 'post',     
 			success: function(data){
 				console.log(data);
@@ -166,21 +187,84 @@
 	});
 	
 	$("#shareImg").click(function(e){
-		console.log(parseInt(e.clientX) - $("#shareImg").offset().left);
-		console.log(parseInt(e.clientY) - $("#shareImg").offset().top);
+		xpos = parseInt(e.clientX) - $("#shareImg").offset().left;
+		ypos = parseInt(e.clientY) - $("#shareImg").offset().top;
+		console.log(xpos);
+		console.log(ypos);
+		var marl = 100*xpos/$("#shareImgForm").width() + 19;
+		xrate = 100*xpos/$("#blah").width();
+		yrate = 100*ypos/$("#blah").height();
+		console.log(xrate);
+		console.log(yrate);
+		var ndiv = $(document.createElement('div'));
+		ndiv.attr({id : "tagbox"});
+		//ndiv.attr({style : "width : " + Math.floor(loc[2]-loc[0])+"px;" + " height : " + Math.floor(loc[3]-loc[1]) +"px;"});
+		$("#shareImgbox").append(ndiv);
+		$("#shareImgbox").css("position", "absolute");
+		$("#shareImgbox").css("margin-left", marl + "%");
+		$("#shareImgbox").css("top", 20 + ypos + "px");
+		$("#resultSearch").empty();
+		$("#resultSearch").append("<input id='itemKeyword' type='text' name='keyword' placeholder='Search Article'>");
+		$("#tagbox").append("<a href='#myModal' role='button' class='btn btn-large' onclick='$(\"#shareImgbox\").empty()' data-toggle='modal'>Add tag</a>");
+		
+		/* $("#sbox" + boxnum).css("margin-top", loc[1]);
+		$("#sbox" + boxnum).css("margin-left", loc[0]);
+		$("#sbox" + boxnum).attr("ondrop", "drop(this, event);");
+		$("#sbox" + boxnum).attr("ondragenter", "return false;");
+		$("#sbox" + boxnum).attr("ondragover", "return false;"); */
 	});
 	
+	function addTag(link, imgurl, title, price){
+		alert(imgurl);
+		if(boxnum<5){
+			var marl = 100*xpos/$("#shareImgForm").width() + 19;
+			var ndiv = $(document.createElement('div'));
+			ndiv.attr({id : "tagbtn"+boxnum });
+			$("#shareImgForm").append(ndiv);
+			$("#tagbtn"+boxnum).css("position", "absolute");
+			$("#tagbtn"+boxnum).css("margin-left", marl + "%");
+			$("#tagbtn"+boxnum).css("top", 20 + ypos + "px");
+			$("#tagbtn"+boxnum).append("<img src ='images/frame.png' style='width:10px'>");
+			$("#taggedbox_"+boxnum).append("<div style='font-size:20px; overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'><img src="+ imgurl+"><br>"+ title +"<br>"+price+"ì›</div>");
+			boxnum++;
+		}else{
+			alert("!");
+		}
+	}
+	
+	$("#searchbtn").click(function(e){
+		$.ajax({
+			url : 'keywordSearch.do',
+			data : "keyword="+ $("#itemKeyword").val(),
+			type : 'post',
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+			success : function(data){
+				
+				var jsonArr = $.parseJSON(data);				
+				$("#resultSearch").append("<table id='stable' class='table table-hover' style='width:100%;'> <thead> <tr> <th> </th> <th> image </th> <th> title </th> <th> price </th> </tr> </thead> ");
+				$("#stable").append("<tbody>");
+				for(var i = 0; i < jsonArr.length; i++){
+					var jsonObj = jsonArr[i];
+					$("#stable").append("<tr> <td> <button class='btn' onclick='addTag(\""+jsonObj.link+"\",\""+jsonObj.imgUrl+"\",\""+jsonObj.title+"\",\""+jsonObj.price+"\")'> Tag it </button> </td> <td> <img src="+jsonObj.imgUrl+"></td> <td>" + jsonObj.title+ " </td> <td>"+ jsonObj.price +"</td> </tr>");
+				}
+				$("#resultSearch").append("</tbody> </table>");
+			},
+			error : function(err){
+				alert("n");
+			}
+		});
+	});
 	
 	/* 
 		var form = $('#imgUp');
 			form.submit(function(e){
 				$.ajax({
 					url: 'profileUp.do',
-					data: form.serialize(),  //ÆûÀÇ °ªµéÀ» ÁÖ¼ÒÈ­ÇÏ¿© º¸³»°Ô µË´Ï´Ù.
+					data: form.serialize(),  //í¼ì˜ ê°’ë“¤ì„ ì£¼ì†Œí™”í•˜ì—¬ ë³´ë‚´ê²Œ ë©ë‹ˆë‹¤.
 					type: 'POST',     
 					success: function(data){
-						$('#imgInp').val('');                           //file input¿¡ µé¾î°¡ ÀÖ´Â °ªÀ» ºñ¿öÁİ´Ï´Ù.
-						console.log(data);                      //¾÷·Îµå µÇ¾ú´Ù¸é °á°ú¸¦ ÄÜ¼Ö¿¡ Ãâ·ÂÇØº¾´Ï´Ù.
+						$('#imgInp').val('');                           //file inputì— ë“¤ì–´ê°€ ìˆëŠ” ê°’ì„ ë¹„ì›Œì¤ë‹ˆë‹¤.
+						console.log(data);                      //ì—…ë¡œë“œ ë˜ì—ˆë‹¤ë©´ ê²°ê³¼ë¥¼ ì½˜ì†”ì— ì¶œë ¥í•´ë´…ë‹ˆë‹¤.
 					}
 				});
 			});

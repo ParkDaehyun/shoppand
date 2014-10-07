@@ -4,6 +4,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import net.sf.json.JSONArray;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,10 +18,14 @@ import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pdh.shoppand_17.model.entity.Shares;
+import com.pdh.shoppand_17.service.ShareService;
 
 @Controller
 @SessionAttributes("userInfo")
 public class ShareController {
+	
+	@Autowired
+	private ShareService shareService;
 	
 	@RequestMapping(value = "/shareUploadForm.do")
 	public ModelAndView imgUploadForm(){
@@ -40,5 +47,22 @@ public class ShareController {
 		}
 		
 		return fileName;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="keywordSearch.do", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	public String keywordSearch(@RequestParam("keyword")String keyword){
+		JSONArray result = null;
+		try {
+			keyword = new String(keyword.getBytes("8859_1"), "UTF-8");
+			result = shareService.naverOpenAPI(keyword);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(result);
+		String json = result.toString();
+		System.out.println(json);
+		return json;
 	}
 }

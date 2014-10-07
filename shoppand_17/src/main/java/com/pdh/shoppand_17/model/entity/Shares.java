@@ -43,7 +43,7 @@ public class Shares {
 	
 
 	@OneToMany(mappedBy = "share")
-	private List<SharedItems> sharedItems = new ArrayList<SharedItems>();
+	private List<Items> items = new ArrayList<Items>();
 
 	public Long getShareId() {
 		return shareId;
