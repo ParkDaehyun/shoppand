@@ -4,10 +4,13 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import javax.validation.Valid;
+
 import net.sf.json.JSONArray;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pdh.shoppand_17.model.entity.Members;
 import com.pdh.shoppand_17.model.entity.Shares;
 import com.pdh.shoppand_17.service.ShareService;
 
@@ -49,6 +53,10 @@ public class ShareController {
 		return fileName;
 	}
 	
+	@RequestMapping(value = "/shareUp.do")
+	public void shareUp(@Valid Shares share, BindingResult result){
+		shareService.saveShare(share);
+	}
 	
 	@ResponseBody
 	@RequestMapping(value="keywordSearch.do", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")

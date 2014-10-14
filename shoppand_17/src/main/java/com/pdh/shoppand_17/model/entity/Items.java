@@ -25,7 +25,7 @@ public class Items {
 	private String imgUrl;
 	
 	@Column
-	private String itemUrl;
+	private String link;
 
 	@Column
 	private int price;
@@ -40,6 +40,21 @@ public class Items {
 	@JoinColumn(name = "shareId")
 	private Shares share;
 	
+	
+
+	public Items() {
+	}
+
+	public Items(String itemName, String imgUrl, String link,
+			int price, String xpos, String ypos) {
+		this.itemName = itemName;
+		this.imgUrl = imgUrl;
+		this.link = link;
+		this.price = price;
+		this.xpos = xpos;
+		this.ypos = ypos;
+	}
+
 	public Long getItemId() {
 		return itemId;
 	}
@@ -56,12 +71,12 @@ public class Items {
 		this.itemName = itemName;
 	}
 
-	public String getItemUrl() {
-		return itemUrl;
+	public String getLink() {
+		return link;
 	}
 
-	public void setItemUrl(String itemUrl) {
-		this.itemUrl = itemUrl;
+	public void setLink(String link) {
+		this.link = link;
 	}
 
 	public String getImgUrl() {

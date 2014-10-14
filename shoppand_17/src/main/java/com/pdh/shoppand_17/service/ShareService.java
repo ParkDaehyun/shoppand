@@ -16,10 +16,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pdh.shoppand_17.model.entity.Shares;
 import com.pdh.shoppand_17.model.repository.ShareRepository;
 
 @Service
@@ -105,5 +105,9 @@ public class ShareService {
 		}else{
 			return "";
 		}
+	}
+
+	public void saveShare(Shares share) {
+		shareRepository.save(share);
 	}
 }

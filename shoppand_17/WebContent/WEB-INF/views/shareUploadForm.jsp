@@ -128,7 +128,6 @@
 			<div class="modal-footer">
 				<button id="searchbtn" class="btn">Search</button>
 				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button id="searchbtn" class="btn">Search</button>
 			</div>
 		</div>		
 
@@ -215,8 +214,22 @@
 	});
 	
 	function addTag(link, imgurl, title, price){
-		alert(imgurl);
 		if(boxnum<5){
+			console.log(link);
+			link = link.replace(/\+/g,'#');
+			$.ajax({
+				url : 'additemtag.do',
+				data : "xpos="+xrate+"&ypos="+yrate+"&price="+price+"&link="+link+"&imgurl="+imgurl+"&itemname="+title,
+				type : 'post',
+				success : function(data){
+					console.log(boxnum-1);
+					$("#taggedbox_"+(boxnum-1)).val(data);
+					console.log($("#taggedbox_"+(boxnum-1)).val());
+				},
+				error : function(e){
+					alert(e);
+				}
+			});
 			var marl = 100*xpos/$("#shareImgForm").width() + 19;
 			var ndiv = $(document.createElement('div'));
 			ndiv.attr({id : "tagbtn"+boxnum });
@@ -224,11 +237,51 @@
 			$("#tagbtn"+boxnum).css("position", "absolute");
 			$("#tagbtn"+boxnum).css("margin-left", marl + "%");
 			$("#tagbtn"+boxnum).css("top", 20 + ypos + "px");
-			$("#tagbtn"+boxnum).append("<img src ='images/frame.png' style='width:10px'>");
-			$("#taggedbox_"+boxnum).append("<div style='font-size:20px; overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'><img src="+ imgurl+"><br>"+ title +"<br>"+price+"원</div>");
+			$("#tagbtn"+boxnum).append("<img id='"+boxnum+"' src='images/frame.png' style='width:20px' onmouseover='onmouse(this)' onmouseout='outmouse(this)' onclick='clickimg(this)'>");
+			$("#taggedbox_"+boxnum).append("<div id='boxdiv"+boxnum+"' style='font-size:20px; overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'><img src="+ imgurl+"><br>"+ title +"<br>"+price+"원</div>");
 			boxnum++;
 		}else{
 			alert("!");
+		}
+	}
+	
+	function onmouse(img){
+		img.src = 'images/onmouseframe.png';
+		$("#boxdiv"+img.id).css("border-style","outset");
+		$("#boxdiv"+img.id).css("border-color","rgba(158, 233, 200, 0.53)");
+	}
+	
+	function outmouse(img){
+		img.src = 'images/frame.png';
+		$("#boxdiv"+img.id).css("border-style","none");
+	}
+	
+	function clickimg(img){
+		var ans = confirm("삭제하시겠습니까?");
+		if(ans == true){
+			$("#boxdiv"+img.id).remove();
+			$("#tagbtn"+img.id).remove();
+			console.log(img.id);
+			console.log($("#taggedbox_"+img.id).val());
+			$.ajax({
+				url : 'delitemtag.do',
+				data : 'itemId='+$("#taggedbox_"+img.id).val(),
+				type : 'post',
+				success : function(data){
+					alert(data);
+				}
+			});
+			var prenum = parseInt(img.id);
+			while(prenum<5){
+				var nextnum = prenum + 1;
+				$("#boxdiv"+nextnum).attr("id","boxdiv"+prenum);
+				$boxcut = $("#boxdiv"+prenum).detach();
+				$("#taggedbox_"+prenum).append($boxcut);
+				$("#tagbtn"+nextnum).attr("id","tagbtn"+prenum);
+				$("#"+nextnum).attr("id",prenum);
+				prenum++;
+			}
+			boxnum--;
 		}
 	}
 	
@@ -239,13 +292,14 @@
 			type : 'post',
 			contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
 			success : function(data){
-				
+				$("#resultSearch").empty();
+				$("#resultSearch").append("<input id='itemKeyword' type='text' name='keyword' placeholder='Search Article'>");
 				var jsonArr = $.parseJSON(data);				
 				$("#resultSearch").append("<table id='stable' class='table table-hover' style='width:100%;'> <thead> <tr> <th> </th> <th> image </th> <th> title </th> <th> price </th> </tr> </thead> ");
 				$("#stable").append("<tbody>");
 				for(var i = 0; i < jsonArr.length; i++){
 					var jsonObj = jsonArr[i];
-					$("#stable").append("<tr> <td> <button class='btn' onclick='addTag(\""+jsonObj.link+"\",\""+jsonObj.imgUrl+"\",\""+jsonObj.title+"\",\""+jsonObj.price+"\")'> Tag it </button> </td> <td> <img src="+jsonObj.imgUrl+"></td> <td>" + jsonObj.title+ " </td> <td>"+ jsonObj.price +"</td> </tr>");
+					$("#stable").append("<tr> <td> <button class='btn' onclick='addTag(\""+jsonObj.link+"\",\""+jsonObj.imgUrl+"\",\""+jsonObj.title+"\",\""+jsonObj.price+"\")' data-dismiss='modal' aria-hidden='true'> Tag it </button> </td> <td> <img src="+jsonObj.imgUrl+"></td> <td>" + jsonObj.title+ " </td> <td>"+ jsonObj.price +"</td> </tr>");
 				}
 				$("#resultSearch").append("</tbody> </table>");
 			},

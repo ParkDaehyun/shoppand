@@ -51,11 +51,7 @@ public class Members {
 	private List<Groups> memberGroups = new ArrayList<Groups>();
 	
 	public Members() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
-
-
 
 	public Members(String email, String password, String name, String gender,
 			String location, String profileImg) {
