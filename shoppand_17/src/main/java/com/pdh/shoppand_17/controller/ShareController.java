@@ -55,7 +55,7 @@ public class ShareController {
 	
 	@RequestMapping(value = "/shareUp.do")
 	public void shareUp(@Valid Shares share, BindingResult result){
-		shareService.saveShare(share);
+		Shares nshare = shareService.saveShare(share);
 	}
 	
 	@ResponseBody

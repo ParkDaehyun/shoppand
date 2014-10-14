@@ -107,7 +107,7 @@ public class ShareService {
 		}
 	}
 
-	public void saveShare(Shares share) {
-		shareRepository.save(share);
+	public Shares saveShare(Shares share) {
+		return shareRepository.save(share);
 	}
 }
