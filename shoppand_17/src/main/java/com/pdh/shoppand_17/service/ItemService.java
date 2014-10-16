@@ -21,6 +21,11 @@ public class ItemService {
 	public void delItemTag(String itemId) {
 		itemRepository.delete(itemRepository.findOne(Long.parseLong(itemId)));
 	}
+
+
+	public Items findItem(Long itemId) {
+		return itemRepository.findOne(itemId);
+	}
 	
 	
 

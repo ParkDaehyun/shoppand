@@ -110,4 +110,14 @@ public class Items {
 	public void setYpos(String ypos) {
 		this.ypos = ypos;
 	}
+
+	public Shares getShare() {
+		return share;
+	}
+
+	public void setShare(Shares share) {
+		this.share = share;
+	}
+	
+	
 }

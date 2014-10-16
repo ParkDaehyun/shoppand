@@ -81,7 +81,7 @@ public class MemberController {
 		System.out.println(fileName+"!");
 		try{
 			//폴더에 파일 저장
-			file.transferTo(new File("C:/dev/workspace/shoppand_17/WebContent/images/profileImgs/" + fileName));
+			file.transferTo(new File("C:/Users/Administrator/git/shoppand_17/shoppand_17/WebContent/images/profileImgs/" + fileName));
 		}catch(Exception e){
 			e.printStackTrace();
 		}

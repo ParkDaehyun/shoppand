@@ -100,4 +100,17 @@ public class Shares {
 	public void setGroup(Groups group) {
 		this.group = group;
 	}
+
+	public List<Items> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Items> items) {
+		this.items = items;
+	}
+	
+	public void addItems(Items item) {
+		this.items.add(item);
+		item.setShare(this);
+	}
 }

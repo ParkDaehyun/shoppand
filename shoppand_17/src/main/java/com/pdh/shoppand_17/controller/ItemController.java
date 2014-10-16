@@ -1,11 +1,15 @@
 package com.pdh.shoppand_17.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pdh.shoppand_17.model.entity.Items;
+import com.pdh.shoppand_17.model.entity.Shares;
 import com.pdh.shoppand_17.service.ItemService;
 
 @Controller
@@ -31,4 +35,22 @@ public class ItemController {
 		return "i";
 	}
 	
+	/*@RequestMapping(value="/tagaddon.do")
+	public String tagAddOn(String imgName, String firitem, String secitem, String thiitem, String fouitem, Model model){
+		ArrayList<String> list = new ArrayList<String>();
+		list.add(0, firitem);
+		list.add(1, secitem);
+		list.add(2, thiitem);
+		list.add(3, fouitem);
+		for(int i=0; i<list.size(); i++){
+			if(list.get(i)!=""){
+				System.out.println(list.get(i));
+				model.addAttribute("item"+i, itemService.findItem(list.get(i)));
+			}
+		}
+		model.addAttribute("share", new Shares());
+		model.addAttribute("imgName", imgName);
+		model.addAttribute("list", list);
+		return "shareTextUploadForm";
+	}*/
 }

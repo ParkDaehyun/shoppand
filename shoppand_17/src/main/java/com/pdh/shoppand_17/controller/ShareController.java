@@ -20,8 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.pdh.shoppand_17.model.entity.Members;
 import com.pdh.shoppand_17.model.entity.Shares;
+import com.pdh.shoppand_17.service.ItemService;
 import com.pdh.shoppand_17.service.ShareService;
 
 @Controller
@@ -31,6 +31,9 @@ public class ShareController {
 	@Autowired
 	private ShareService shareService;
 	
+	@Autowired
+	private ItemService itemService;
+	
 	@RequestMapping(value = "/shareUploadForm.do")
 	public ModelAndView imgUploadForm(){
 		return new ModelAndView("shareUploadForm", "share", new Shares());
@@ -38,14 +41,15 @@ public class ShareController {
 	
 	@ResponseBody
 	@RequestMapping(value="/shareImgUp.do", method = RequestMethod.POST)
-	public String upload(MultipartRequest multipartRequest){
+	public String shareImgUpload(MultipartRequest multipartRequest){
+		System.out.println("abccccccc");
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		MultipartFile file = multipartRequest.getFile("profileImg");
 		String fileName = file.getOriginalFilename() + dateFormat.format(calendar.getTime());		
 		System.out.println(fileName+"!");
 		try{
-			file.transferTo(new File("C:/dev/workspace/shoppand_17/WebContent/images/shareImgs/" + fileName));
+			file.transferTo(new File("C:/Users/Administrator/git/shoppand_17/shoppand_17/WebContent/images/shareImgs/" + fileName));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -54,8 +58,19 @@ public class ShareController {
 	}
 	
 	@RequestMapping(value = "/shareUp.do")
-	public void shareUp(@Valid Shares share, BindingResult result){
+	@ResponseBody
+	public String shareUp(@Valid Shares share, BindingResult result, String items){
+		String [] itemarray = items.split(",");
 		Shares nshare = shareService.saveShare(share);
+		System.out.println(nshare.getTitle());
+		for(String i : itemarray){
+			if(i!=""){
+				nshare.addItems(itemService.findItem(Long.parseLong(i)));
+			}
+		}
+		System.out.println(nshare.getItems().get(0).getItemName());
+		System.out.println(nshare.getItems().get(1).getItemName());
+		return "!";
 	}
 	
 	@ResponseBody

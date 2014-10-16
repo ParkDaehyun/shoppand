@@ -47,7 +47,7 @@
 							<li><a href="index.html">Home</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="about.html">About Us</a></li>
+									<li><a href="about.html">About Us ${requestScope.list}</a></li>
 									<li><a href="services.html">Services</a></li>
 									<li><a href="price.html">Price</a></li>
 									<li><a href="login.html">Login</a></li>
@@ -90,29 +90,45 @@
 	        <form:hidden path="writer" value="${userInfo.email}"/>
 	        <form:hidden path="writingDate" value="${toDate}"/>
 	        <form:input path="title" class="input-block-level" id="title" placeholder="Title"/>
-	        <form:hidden path="imgName" id="imgName"/>
+	        <form:hidden path="imgName" id="imgName" value="${requestScope.imgName}"/>
 	    	<form:input path="info" class="input-block-level" id="info" placeholder="Comments" style="height:80%;"/>
-	    	<form:hidden path="items" id="ilist"/>
+	    	<form:hidden path="items" id="ilist" value="${requestScope.list}"/>
 	    	<button type="button" id="shareSM" class="btn btn-large btn-block" >
 	            Post
 	         </button>
 	    	</div>
 	    	</form:form>
+	    	
         	<div id="shareImgForm" class="text no-animate" style="height:80%; width:60%;  margin-left:-12%; position:absolute; padding-left:10px; padding-right:10px;">
-        			<!-- 
-        		<canvas id = "frameCan" width="200px" height = "200px"></canvas> -->
-        		<form id="imgUp" enctype="multipart/form-data">
-        		<div id="shareImgbox"></div>
-	            <div id="shareImg" style="margin-left:20%; width:60%; height:80%; " >
-	            	<img id="blah"  alt="Please upload your image" style="width:100%; height:100%;"/>
+        		
+        		
+        			<div id="shareImgbox"></div>
+	            	<div id="shareImg" style="margin-left:20%; width:60%; height:80%; " >
+	            		<img src="images/shareImgs/${requestScope.imgName}"  alt="Please upload your image" style="width:100%; height:100%;"/>
+	            	</div>
+	            	
+	            <form id="tagnameForm">
+	            <div id="taggedbox_1" style="position:absolute; top:10%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);" >
+	            	<div id="boxdiv1" style="font-size: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-style: none; border-color: rgba(158, 233, 200, 0.529412);">
+	            	<img src="${requestScope.item0.imgUrl}"><br>${requestScope.item0.itemName}<br>${requestScope.item0.price}
+	            	</div>
 	            </div>
-	            <input type="button" value="Search files" class="btn"/>
-	            <input type="file" name="profileImg" id="imgInp" style="font-size:30px; position:absolute; margin-left:-110px; width:50px; opacity:0;">
-	            </form>
-	            <div id="taggedbox_1" style="position:absolute; top:10%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);"></div>
-	            <div id="taggedbox_2" style="position:absolute; top:10%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);"></div>
-	            <div id="taggedbox_3" style="position:absolute; top:55%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);"></div>
-	            <div id="taggedbox_4" style="position:absolute; top:55%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);"></div>
+	            <div id="taggedbox_2" style="position:absolute; top:10%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);">
+	            	<div id="boxdiv2" style="font-size: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-style: none; border-color: rgba(158, 233, 200, 0.529412);">
+	            	<img src="${requestScope.item1.imgUrl}"><br>${requestScope.item1.itemName}<br>${requestScope.item1.price}
+	            	</div>
+	            </div>
+	            <div id="taggedbox_3" style="position:absolute; top:55%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);">
+	            	<div id="boxdiv3" style="font-size: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-style: none; border-color: rgba(158, 233, 200, 0.529412);">
+	            	<img src="${requestScope.item2.imgUrl}"><br>${requestScope.item2.itemName}<br>${requestScope.item2.price}
+	            	</div>
+	            </div>
+	            <div id="taggedbox_4" style="position:absolute; top:55%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);">
+	            	<div id="boxdiv4" style="font-size: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-style: none; border-color: rgba(158, 233, 200, 0.529412);">
+	            	<img src="${requestScope.item3.imgUrl}"><br>${requestScope.item3.itemName}<br>${requestScope.item3.price}
+	            	</div>
+	            </div>
+	    		</form>
 	    	</div>
 	    	
         </div>
@@ -175,18 +191,36 @@
 	
 	
 	$("#shareSM").click(function(e){
-		var form = $('#imgUp');
+		console.log($("#ilist").val());
+		$("#shareForm").submit();
+		/* var form = $('#imgUp');
+		//alert(form);	
 		form.ajaxSubmit({
 			url: 'shareImgUp.do',
 			data: form.serialize(),  //폼의 값들을 주소화하여 보내게 됩니다.
 			type: 'post',     
 			success: function(data){
-				console.log(data);
+				alert(data);
 				$("#imgName").val(data); 
-				$("#ilist").val($("#taggedbox_1").val()+","+$("#taggedbox_2").val()+","+$("#taggedbox_3").val()+","+$("#taggedbox_4").val());
-				$("#shareForm").submit();
+				var tagform =$("#tagnameForm");
+				tagform.ajaxSubmit({
+					url : 'tagaddon.do',
+					data : tagform.serialize(),
+					type : 'post',
+					success : function(data){
+						$("#ilist").val(data);
+						console.log($("#ilist").val());
+						//$("#shareForm").submit();
+					},
+					error : function(err){
+						alert(err);
+					}
+				});
+			},
+			error : function(err){
+				alert(err);
 			}
-		});
+		}); */
 	});
 	
 	$("#shareImg").click(function(e){
@@ -227,8 +261,8 @@
 				type : 'post',
 				success : function(data){
 					console.log(boxnum-1);
-					$("#taggedbox_"+(boxnum-1)).val(data);
-					console.log($("#taggedbox_"+(boxnum-1)).val());
+					$("#item_"+(boxnum-1)).val(data);
+					console.log($("#item_"+(boxnum-1)).val());
 				},
 				error : function(e){
 					alert(e);
@@ -266,10 +300,10 @@
 			$("#boxdiv"+img.id).remove();
 			$("#tagbtn"+img.id).remove();
 			console.log(img.id);
-			console.log($("#taggedbox_"+img.id).val());
+			console.log($("#item_"+img.id).val());
 			$.ajax({
 				url : 'delitemtag.do',
-				data : 'itemId='+$("#taggedbox_"+img.id).val(),
+				data : 'itemId='+$("#item_"+img.id).val(),
 				type : 'post',
 				success : function(data){
 					alert(data);

@@ -47,7 +47,7 @@
 							<li><a href="index.html">Home</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="about.html">About Us</a></li>
+									<li><a href="about.html">About Us ${requestScope.list}</a></li>
 									<li><a href="services.html">Services</a></li>
 									<li><a href="price.html">Price</a></li>
 									<li><a href="login.html">Login</a></li>
@@ -84,35 +84,35 @@
 		</div>
 		
 		<div class="parallax no-animate large-view form-page" style="background-image: url(images/bg1.jpg);">	
-			<form:form commandName="share" id="shareForm" action="shareUp.do" method="post">
-			<div class="text no-animate" style="height:80%; width:30%; margin-left:-45%; position:absolute;">
-			<!-- 	<h1>Share Upload</h1><br> -->
-	        <form:hidden path="writer" value="${userInfo.email}"/>
-	        <form:hidden path="writingDate" value="${toDate}"/>
-	        <form:input path="title" class="input-block-level" id="title" placeholder="Title"/>
-	        <form:hidden path="imgName" id="imgName"/>
-	    	<form:input path="info" class="input-block-level" id="info" placeholder="Comments" style="height:80%;"/>
-	    	<form:hidden path="items" id="ilist"/>
-	    	<button type="button" id="shareSM" class="btn btn-large btn-block" >
-	            Post
-	         </button>
-	    	</div>
-	    	</form:form>
-        	<div id="shareImgForm" class="text no-animate" style="height:80%; width:60%;  margin-left:-12%; position:absolute; padding-left:10px; padding-right:10px;">
-        			<!-- 
-        		<canvas id = "frameCan" width="200px" height = "200px"></canvas> -->
+				    	
+        	<div id="shareImgForm" class="text no-animate" style="height:80%; width:60%;  margin-left:-30%; position:absolute; padding-left:10px; padding-right:10px;">
         		<form id="imgUp" enctype="multipart/form-data">
-        		<div id="shareImgbox"></div>
-	            <div id="shareImg" style="margin-left:20%; width:60%; height:80%; " >
-	            	<img id="blah"  alt="Please upload your image" style="width:100%; height:100%;"/>
-	            </div>
-	            <input type="button" value="Search files" class="btn"/>
-	            <input type="file" name="profileImg" id="imgInp" style="font-size:30px; position:absolute; margin-left:-110px; width:50px; opacity:0;">
+        		
+        			<div id="shareImgbox"></div>
+	            	<div id="shareImg" style="margin-left:20%; width:60%; height:80%; " >
+	            		<img id="blah"  alt="Please upload your image" style="width:100%; height:90%;"/>
+	            	</div>
+	            	<input type="button" value="Search files" class="btn"/>
+	            	<input type="file" name="profileImg" id="imgInp" style="font-size:30px; position:absolute; margin-left:-110px; width:50px; opacity:0;">
 	            </form>
-	            <div id="taggedbox_1" style="position:absolute; top:10%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);"></div>
-	            <div id="taggedbox_2" style="position:absolute; top:10%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);"></div>
-	            <div id="taggedbox_3" style="position:absolute; top:55%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);"></div>
-	            <div id="taggedbox_4" style="position:absolute; top:55%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);"></div>
+	            <form id="tagadd" action="tagaddon.do"> 
+		            <input type="hidden" id="imgName" name="imgName">
+		            <div id="taggedbox_1" style="position:absolute; top:10%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);" >
+		            	<input type="hidden" id="item_1" name="firitem">
+		            </div>
+		            <div id="taggedbox_2" style="position:absolute; top:10%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);">
+		            	<input type="hidden" id="item_2" name="secitem">
+		            </div>
+		            <div id="taggedbox_3" style="position:absolute; top:55%; width:15%; height:20%; margin-left:2%; background-color:rgba(0,0,0,0.5);">
+		            	<input type="hidden" id="item_3" name="thiitem">
+		            </div>
+		            <div id="taggedbox_4" style="position:absolute; top:55%; width:15%; height:20%; margin-left:80%; background-color:rgba(0,0,0,0.5);">
+		            	<input type="hidden" id="item_4" name="fouitem">
+		            </div>
+	            </form>
+	            <button type="button" id="shareSM" class="btn btn-large" >
+	            Post
+	         	</button>
 	    	</div>
 	    	
         </div>
@@ -176,15 +176,18 @@
 	
 	$("#shareSM").click(function(e){
 		var form = $('#imgUp');
+		//alert(form);	
 		form.ajaxSubmit({
 			url: 'shareImgUp.do',
 			data: form.serialize(),  //폼의 값들을 주소화하여 보내게 됩니다.
 			type: 'post',     
 			success: function(data){
-				console.log(data);
+				alert(data);
 				$("#imgName").val(data); 
-				$("#ilist").val($("#taggedbox_1").val()+","+$("#taggedbox_2").val()+","+$("#taggedbox_3").val()+","+$("#taggedbox_4").val());
-				$("#shareForm").submit();
+				$("#tagadd").submit();
+			},
+			error : function(err){
+				alert(err);
 			}
 		});
 	});
@@ -227,8 +230,8 @@
 				type : 'post',
 				success : function(data){
 					console.log(boxnum-1);
-					$("#taggedbox_"+(boxnum-1)).val(data);
-					console.log($("#taggedbox_"+(boxnum-1)).val());
+					$("#item_"+(boxnum-1)).val(data);
+					console.log($("#item_"+(boxnum-1)).val());
 				},
 				error : function(e){
 					alert(e);
@@ -266,10 +269,10 @@
 			$("#boxdiv"+img.id).remove();
 			$("#tagbtn"+img.id).remove();
 			console.log(img.id);
-			console.log($("#taggedbox_"+img.id).val());
+			console.log($("#item_"+img.id).val());
 			$.ajax({
 				url : 'delitemtag.do',
-				data : 'itemId='+$("#taggedbox_"+img.id).val(),
+				data : 'itemId='+$("#item_"+img.id).val(),
 				type : 'post',
 				success : function(data){
 					alert(data);
