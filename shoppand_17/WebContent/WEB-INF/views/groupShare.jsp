@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -80,13 +81,16 @@
 			<div class="text">
 				<h1>${group.groupName}</h1>
 				<p>since ${group.groupDate}</p>
+				
 			</div>
 		</div>
+		
+		
 		
 		<section class="text-block">
 			<div class="light-bg">
 				<div class="container">
-					<h2 class="with-border"> Shares <small class="color">/ write something</small><a class="btn pull-right" href="shareUploadForm.do">Post</a></h2>
+					<h2 class="with-border"> Shares <small class="color">/ write something</small><a class="btn pull-right" href="shareUploadForm.do?groupId=${group.groupId}">Post</a></h2>
 					
 					<div class="row-fluid">
 						<div class="span9">
@@ -94,7 +98,7 @@
 								<li class="span12">
 									<div class="thumbnail">
 										<div class="img-wrap">
-											<a href="#"><img src="images/bg4.jpg" alt=""/></a>
+											<a href="#"><img src="images/shareImgs/${shares[recentnum].imgName}" alt=""/></a>
 										</div>	
 										<h3>Lorem ipsum dolor sit amet</h3>
 										<div class="info-panel clearfix">
@@ -105,11 +109,13 @@
 										<a class="btn pull-right" href="#">Read more</a>
 									</div>	
 								</li>
+								<c:forEach var="list" items="${shares}" begin="0" step="2" varStatus="s" end="${recentnum-1}">
+				
 								<div class="row">
 									<li class="span6">
 										<div class="thumbnail">
 											<div class="img-wrap">
-												<a href="#"><img src="images/image_1.jpg" alt=""/></a>
+												<a href="#"><img src="images/shareImgs/${list[s.index].imgName}" alt=""/></a>
 											</div>	
 											<h3>Lorem ipsum dolor sit amet</h3>
 											<div class="info-panel clearfix">
@@ -123,7 +129,7 @@
 									<li class="span6">
 										<div class="thumbnail">
 											<div class="img-wrap">
-												<a href="#"><img src="images/image_2.jpg" alt=""/></a>
+												<a href="#"><img src="images/shareImgs/${list[s.index+1].imgName}" alt=""/></a>
 											</div>
 											<h3>Cum maiestatis necessitatibus</h3>
 											<div class="info-panel clearfix">
@@ -134,8 +140,9 @@
 											<a class="btn pull-right" href="#">Read more</a>
 										</div>	
 									</li>
-								</div>	
-								<div class="row">
+								</div>
+								</c:forEach>
+								<!-- <div class="row">
 									<li class="span6">
 										<div class="thumbnail">
 											<div class="img-wrap">
@@ -194,7 +201,7 @@
 											<a class="btn pull-right" href="#">Read more</a>
 										</div>	
 									</li>
-								</div>	
+								</div>	 -->
 							</ul>	
 							<div class="pagination">
 								<ul>

@@ -20,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pdh.shoppand_17.model.entity.Groups;
 import com.pdh.shoppand_17.model.entity.Shares;
+import com.pdh.shoppand_17.service.GroupService;
 import com.pdh.shoppand_17.service.ItemService;
 import com.pdh.shoppand_17.service.ShareService;
 
@@ -29,20 +31,25 @@ import com.pdh.shoppand_17.service.ShareService;
 public class ShareController {
 	
 	@Autowired
+	private GroupService groupService;
+	
+	@Autowired
 	private ShareService shareService;
 	
 	@Autowired
 	private ItemService itemService;
 	
 	@RequestMapping(value = "/shareUploadForm.do")
-	public ModelAndView imgUploadForm(){
-		return new ModelAndView("shareUploadForm", "share", new Shares());
+	public ModelAndView imgUploadForm(Long groupId){
+		ModelAndView mv = new ModelAndView("shareUploadForm");
+		mv.addObject("share", new Shares());
+		mv.addObject("group", groupService.getGroup(groupId));
+		return mv;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/shareImgUp.do", method = RequestMethod.POST)
 	public String shareImgUpload(MultipartRequest multipartRequest){
-		System.out.println("abccccccc");
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		MultipartFile file = multipartRequest.getFile("profileImg");
@@ -58,19 +65,23 @@ public class ShareController {
 	}
 	
 	@RequestMapping(value = "/shareUp.do")
-	@ResponseBody
-	public String shareUp(@Valid Shares share, BindingResult result, String items){
+	public ModelAndView shareUp(@Valid Shares share, BindingResult result, String items, String group){
 		String [] itemarray = items.split(",");
 		Shares nshare = shareService.saveShare(share);
-		System.out.println(nshare.getTitle());
+		nshare.setGroup(groupService.getGroup(Long.parseLong(group)));
 		for(String i : itemarray){
 			if(i!=""){
 				nshare.addItems(itemService.findItem(Long.parseLong(i)));
 			}
 		}
-		System.out.println(nshare.getItems().get(0).getItemName());
-		System.out.println(nshare.getItems().get(1).getItemName());
-		return "!";
+		shareService.saveShare(nshare);
+		groupService.updateGroup(groupService.getGroup(Long.parseLong(group)));
+		//System.out.println(groupService.getGroup(Long.parseLong(group)).getShares());
+		ModelAndView mv = new ModelAndView("groupShare");
+		mv.addObject("recentnum", groupService.getGroup(Long.parseLong(group)).getShares().size()-1);
+		mv.addObject("shares", groupService.getGroup(Long.parseLong(group)).getShares());
+		mv.addObject("group", groupService.getGroup(Long.parseLong(group)));
+		return mv;
 	}
 	
 	@ResponseBody

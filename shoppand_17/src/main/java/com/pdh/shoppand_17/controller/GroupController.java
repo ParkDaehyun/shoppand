@@ -72,13 +72,13 @@ public class GroupController {
 	
 	@RequestMapping(value = "/chkGroupMember.do", method = RequestMethod.POST)
 	@ResponseBody
-	public String chkGroupMember(String addmail, String groupname){
+	public String chkGroupMember(String addmail, Long groupId){
 		String msg = "1";
 		Members mem = memberService.findMember(addmail);
 		System.out.println(mem);
 		System.out.println(addmail);
-		System.out.println(groupname);
-		System.out.println(groupService.findGroup(groupname).getGroupMembers());
+		//System.out.println(groupname);
+		System.out.println(groupService.getGroup(groupId).getGroupMembers());
 		System.out.println(mem.getMemberGroups());
 		if(mem instanceof Members){/*
 			groupService.findGroup(groupname).addGroupMember(mem);

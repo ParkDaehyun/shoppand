@@ -119,5 +119,10 @@ public class Groups {
 				+ ", groupMembers=" + groupMembers + ", shares=" + shares + "]";
 	}
 
+	public void addGroupShare(Shares share) {
+		this.shares.add(share);
+		
+	}
+
 	
 }

@@ -18,7 +18,7 @@ public class GroupService {
 			return groupRepository.findAll();
 		}
 
-		public Groups findGroup(String gname) {
+		public Groups findGroupByName(String gname) {
 			return groupRepository.findByGroupName(gname);
 		}
 		
@@ -37,7 +37,7 @@ public class GroupService {
 		}
 
 		public Groups getGroup(Long groupId) {
-			return groupRepository.findByGroupId(groupId);
+			return groupRepository.findOne(groupId);
 		}
 
 		public Groups updateGroup(Groups group) {

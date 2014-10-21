@@ -99,6 +99,7 @@ public class Shares {
 
 	public void setGroup(Groups group) {
 		this.group = group;
+		group.addGroupShare(this);
 	}
 
 	public List<Items> getItems() {
@@ -113,4 +114,13 @@ public class Shares {
 		this.items.add(item);
 		item.setShare(this);
 	}
+
+	@Override
+	public String toString() {
+		return "Shares [shareId=" + shareId + ", writer=" + writer + ", title="
+				+ title + ", writingDate=" + writingDate + ", imgName="
+				+ imgName + ", info=" + info + "]";
+	}
+	
+	
 }

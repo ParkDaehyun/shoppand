@@ -158,8 +158,6 @@ public class Members {
 	
 	public void addGroup(Groups group){
 		this.memberGroups.add(group);
-		System.out.println(group + "!");
-		System.out.println(this);
 	}
 
 

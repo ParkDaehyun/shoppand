@@ -9,5 +9,4 @@ import com.pdh.shoppand_17.model.entity.Groups;
 public interface GroupRepository extends CrudRepository<Groups, Long> {
 	Groups findByGroupName(String groupName);
 
-	Groups findByGroupId(Long groupId);
 }

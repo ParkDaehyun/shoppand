@@ -93,8 +93,9 @@
 	        <form:hidden path="imgName" id="imgName"/>
 	    	<form:input path="info" class="input-block-level" id="info" placeholder="Comments" style="height:80%;"/>
 	    	<form:hidden path="items" id="ilist"/>
+	    	<form:hidden path="group" value="${group.groupId}"/>
 	    	<button type="button" id="shareSM" class="btn btn-large btn-block" >
-	            Post
+	            Post ${group.groupId}
 	         </button>
 	    	</div>
 	    	</form:form>
