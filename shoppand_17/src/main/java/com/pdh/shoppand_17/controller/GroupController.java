@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -23,6 +25,7 @@ import com.pdh.shoppand_17.service.GroupService;
 import com.pdh.shoppand_17.service.MemberService;
 
 @Controller
+@SessionAttributes("userInfo")
 public class GroupController {
 	
 	@Autowired
@@ -31,9 +34,10 @@ public class GroupController {
 	private MemberService memberService;
 	
 	@RequestMapping(value = "/groupIndex.do")
-	public ModelAndView getAllGroups(){
+	public ModelAndView getAllGroups(@ModelAttribute("userInfo")Members member){
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("groups",groupService.getAllGroups());
+		mv.addObject("grouplist",memberService.getGroups(member.getEmail()));
+		mv.addObject("groups", groupService.getAllGroups());
 		mv.setViewName("about");
 		return mv;
 	}
@@ -110,10 +114,13 @@ public class GroupController {
 		return msg;
 	}
 	
-	@RequestMapping(value = "/groupshare.do", method = RequestMethod.GET)
-	public ModelAndView groupShare(@RequestParam String groupId){
+	@RequestMapping(value = "/groupshare.do")
+	public ModelAndView groupShare(@ModelAttribute("userInfo")Members member, String groupId){
 		System.out.println(Long.parseLong(groupId));
 		ModelAndView mv = new ModelAndView();
+		mv.addObject("grouplist",memberService.getGroups(member.getEmail()));
+		mv.addObject("groups", groupService.getAllGroups());
+		mv.addObject("recentnum", groupService.getGroup(Long.parseLong(groupId)).getShares().size());
 		mv.addObject("shares", groupService.getGroup(Long.parseLong(groupId)).getShares());
 		mv.addObject("group", groupService.getGroup(Long.parseLong(groupId)));
 		mv.setViewName("groupShare");

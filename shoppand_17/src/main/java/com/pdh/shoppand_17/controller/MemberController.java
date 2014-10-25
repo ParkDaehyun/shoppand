@@ -94,24 +94,19 @@ public class MemberController {
 		return "login";
 	}
 	
-	@RequestMapping(value = "/login.do")
-	public ModelAndView login(@RequestParam(value="email")String email, @RequestParam(value="password")String password, Model model) {
-		ModelAndView mv = new ModelAndView();
+	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
+	public String login(@RequestParam(value="email")String email, @RequestParam(value="password")String password, Model model) {
 		String url = "about";
 		try{
 			memberService.login(email, password);
 			model.addAttribute("userInfo", memberService.findMember(email));
-			System.out.println(email);
-			System.out.println(memberService.findMember(email).getMemberGroups());
-			System.out.println(memberService.getGroups(email));
-			mv.addObject("grouplist", memberService.getGroups(email));
-			mv.addObject("groups",groupService.getAllGroups());
+			model.addAttribute("grouplist", memberService.getGroups(email));
+			model.addAttribute("groups",groupService.getAllGroups());
 		}catch(Exception e){
 			System.out.println("err");
 			url = "login";
 		}
-		mv.setViewName(url);
-		return mv;
+		return url;
 	}
 		
 }

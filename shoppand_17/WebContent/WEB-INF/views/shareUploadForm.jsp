@@ -44,7 +44,7 @@
 					<a class="brand goTop" href="#">Griny</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li><a href="index.html">Home</a></li>
+							<li><a href="index.jsp">Home</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="about.html">About Us</a></li>
@@ -66,13 +66,11 @@
 									<li><a href="blog-single2.html">Blog single two</a></li>
 								</ul>
 							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Gallery <b class="caret"></b></a>
+							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="works.html">Simple gallery</a></li>
-									<li><a href="works2.html">With text</a></li>
-									<li><a href="works3.html">With filter</a></li>
-									<li class="divider"></li>
-									<li><a href="works-single.html">Single project</a></li>
+									<c:forEach items="${grouplist}" var="group">
+									<li><a href="groupshare.do?groupId=${group.groupId}">${group.groupName}</a></li>
+									</c:forEach>
 								</ul>
 							</li>
 							<li><a href="shortcodes.html">Shortcodes</a>
@@ -197,7 +195,7 @@
 		console.log(ypos);
 		var marl = 100*xpos/$("#shareImgForm").width() + 19;
 		xrate = 100*xpos/$("#blah").width();
-		yrate = 100*ypos/$("#blah").height();
+		yrate = 100*ypos/$("#blah").height()+8;
 		console.log(xrate);
 		console.log(yrate);
 		var ndiv = $(document.createElement('div'));
@@ -254,6 +252,7 @@
 		img.src = 'images/onmouseframe.png';
 		$("#boxdiv"+img.id).css("border-style","outset");
 		$("#boxdiv"+img.id).css("border-color","rgba(158, 233, 200, 0.53)");
+		alert($("#taggedbox_"+img.id).val());
 	}
 	
 	function outmouse(img){
@@ -281,6 +280,7 @@
 				var nextnum = prenum + 1;
 				$("#boxdiv"+nextnum).attr("id","boxdiv"+prenum);
 				$boxcut = $("#boxdiv"+prenum).detach();
+				$("#taggedbox_"+prenum).val($("#taggedbox_"+nextnum).val());
 				$("#taggedbox_"+prenum).append($boxcut);
 				$("#tagbtn"+nextnum).attr("id","tagbtn"+prenum);
 				$("#"+nextnum).attr("id",prenum);

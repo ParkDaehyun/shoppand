@@ -5,6 +5,4 @@ import org.springframework.data.repository.CrudRepository;
 import com.pdh.shoppand_17.model.entity.Shares;
 
 public interface ShareRepository extends CrudRepository<Shares, Long> {
-
-	Shares findByShareId(Long shareId);
 }

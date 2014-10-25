@@ -38,7 +38,7 @@
 					<a class="brand goTop" href="#">Griny</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li><a href="index.html">Home</a></li>
+							<li><a href="index.jsp">Home</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="about.html">About Us</a></li>
@@ -80,7 +80,7 @@
 		<div class="parallax no-animate large-view form-page" style="background-image: url(images/bg1.jpg);">	
 			<div class="text no-animate">
 				<h1>Login</h1>
-				<form class="form" action="login.do" method="get">
+				<form class="form" action="login.do" method="post">
 					<div class="section">
 						<input type="text" class="input-block-level" placeholder="Email" name="email">
 						<input type="password" class="input-block-level" placeholder="Password" name="password">

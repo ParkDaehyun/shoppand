@@ -39,7 +39,7 @@
 					<a class="brand goTop" href="#">Griny</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li><a href="index.html">Home</a></li>
+							<li><a href="index.jsp">Home</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
 									<li class="active"><a href="about.html">About Us</a></li>
@@ -63,14 +63,9 @@
 							</li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
-									<c:forEach items="${groups}" var="group">
+									<c:forEach items="${grouplist}" var="group">
 									<li><a href="groupshare.do?groupId=${group.groupId}">${group.groupName}</a></li>
 									</c:forEach>
-									<!-- <li><a href="works.html">Simple gallery</a></li>
-									<li><a href="works2.html">With text</a></li>
-									<li><a href="works3.html">With filter</a></li>
-									<li class="divider"></li>
-									<li><a href="works-single.html">Single project</a></li> -->
 								</ul>
 							</li>
 							<li><a href="shortcodes.html">Shortcodes</a>

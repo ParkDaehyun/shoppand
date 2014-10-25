@@ -65,23 +65,20 @@ public class ShareController {
 	}
 	
 	@RequestMapping(value = "/shareUp.do")
-	public ModelAndView shareUp(@Valid Shares share, BindingResult result, String items, String group){
+	public String shareUp(@Valid Shares share, BindingResult result, String items, String group){
 		String [] itemarray = items.split(",");
 		Shares nshare = shareService.saveShare(share);
 		nshare.setGroup(groupService.getGroup(Long.parseLong(group)));
+		System.out.println(itemarray);
 		for(String i : itemarray){
+			System.out.println(i);
 			if(i!=""){
 				nshare.addItems(itemService.findItem(Long.parseLong(i)));
 			}
 		}
 		shareService.saveShare(nshare);
 		groupService.updateGroup(groupService.getGroup(Long.parseLong(group)));
-		//System.out.println(groupService.getGroup(Long.parseLong(group)).getShares());
-		ModelAndView mv = new ModelAndView("groupShare");
-		mv.addObject("recentnum", groupService.getGroup(Long.parseLong(group)).getShares().size()-1);
-		mv.addObject("shares", groupService.getGroup(Long.parseLong(group)).getShares());
-		mv.addObject("group", groupService.getGroup(Long.parseLong(group)));
-		return mv;
+		return "redirect:/groupshare.do?groupId="+group;
 	}
 	
 	@ResponseBody
@@ -98,5 +95,16 @@ public class ShareController {
 		String json = result.toString();
 		System.out.println(json);
 		return json;
+	}
+	
+	@RequestMapping(value="sharecontent.do")
+	public ModelAndView shareContent(String shareId){
+		Shares sh = null;
+		try {
+			sh = shareService.getShare(Long.parseLong(shareId));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView("shareContent","share", sh);
 	}
 }

@@ -28,8 +28,8 @@ public class ShareService {
 	@Autowired
 	private ShareRepository shareRepository;
 	
-	public void getShare(Long shareId) throws Exception{
-		shareRepository.findByShareId(shareId);
+	public Shares getShare(Long shareId) throws Exception{
+		return shareRepository.findOne(shareId);
 	}
 	
 	public JSONArray naverOpenAPI(String key){

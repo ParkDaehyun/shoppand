@@ -39,7 +39,7 @@
 					<a class="brand goTop" href="#">Griny</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li><a href="index.html">Home</a></li>
+							<li><a href="index.jsp">Home</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="about.html">About Us</a></li>

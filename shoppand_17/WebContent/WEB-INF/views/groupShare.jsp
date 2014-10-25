@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
         <meta charset="utf-8">
@@ -39,7 +39,7 @@
 					<a class="brand goTop" href="#">Griny</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li><a href="index.html">Home</a></li>
+							<li><a href="index.jsp">Home</a></li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="about.html">About Us</a></li>
@@ -61,13 +61,11 @@
 									<li><a href="blog-single2.html">Blog single two</a></li>
 								</ul>
 							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Gallery <b class="caret"></b></a>
+							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="works.html">Simple gallery</a></li>
-									<li><a href="works2.html">With text</a></li>
-									<li><a href="works3.html">With filter</a></li>
-									<li class="divider"></li>
-									<li><a href="works-single.html">Single project</a></li>
+									<c:forEach items="${grouplist}" var="group">
+									<li><a href="groupshare.do?groupId=${group.groupId}">${group.groupName}</a></li>
+									</c:forEach>
 								</ul>
 							</li>
 							<li><a href="shortcodes.html">Shortcodes</a>
@@ -91,45 +89,51 @@
 			<div class="light-bg">
 				<div class="container">
 					<h2 class="with-border"> Shares <small class="color">/ write something</small><a class="btn pull-right" href="shareUploadForm.do?groupId=${group.groupId}">Post</a></h2>
-					
+					<c:choose>
+					<c:when test="${empty shares}">
+							¾ø¾î
+					</c:when>
+					<c:otherwise>
 					<div class="row-fluid">
 						<div class="span9">
 							<ul class="thumbnails">
 								<li class="span12">
 									<div class="thumbnail">
 										<div class="img-wrap">
-											<a href="#"><img src="images/shareImgs/${shares[recentnum].imgName}" alt=""/></a>
+											<a href="#"><img src="images/shareImgs/${shares[recentnum-1].imgName}" alt=""/></a>
 										</div>	
-										<h3>Lorem ipsum dolor sit amet</h3>
+										<h3>${shares[recentnum-1].title}</h3>
 										<div class="info-panel clearfix">
 											<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-											<span class="pull-right"><i class="icon-user"></i> By Rick </span>
+											<span class="pull-right"><i class="icon-user"></i> ${shares[recentnum-1].writer}</span>
 										</div>	
-										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ac interdum ligula. Nullam iaculis dictum ullamcorper. In vitae pellentesque massa. Vivamus viverra libero dapibus, sodales lectus a, consectetur ante. Pellentesque diam ante, egestas at suscipit vel, aliquam sit amet massa</p>
-										<a class="btn pull-right" href="#">Read more</a>
+										<p>${shares[recentnum-1].info}</p>
+										<a class="btn pull-right" href="sharecontent.do?shareId=${shares[recentnum-1].shareId}">Read more</a>
 									</div>	
 								</li>
 								<c:forEach var="list" items="${shares}" begin="0" step="2" varStatus="s" end="${recentnum-1}">
-				
+								
 								<div class="row">
+									<c:forEach var="inlist" items="${shares}" begin="${s.index}" end="${s.index+1}">
 									<li class="span6">
 										<div class="thumbnail">
 											<div class="img-wrap">
-												<a href="#"><img src="images/shareImgs/${list[s.index].imgName}" alt=""/></a>
+												<a href="#"><img src="images/shareImgs/${inlist.imgName}" alt=""/></a>
 											</div>	
-											<h3>Lorem ipsum dolor sit amet</h3>
+											<h3>${inlist.title}</h3>
 											<div class="info-panel clearfix">
 												<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-												<span class="pull-right"><i class="icon-user"></i> By Rick </span>
+												<span class="pull-right"><i class="icon-user"></i>${inlist.writer}</span>
 											</div>	
-											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
-											<a class="btn pull-right" href="#">Read more</a>
+											<p>${inlist.info}</p>
+											<a class="btn pull-right" href="sharecontent.do?shareId=${inlist.shareId}">Read more</a>
 										</div>	
 									</li>
-									<li class="span6">
+									</c:forEach>
+									<%-- <li class="span6">
 										<div class="thumbnail">
 											<div class="img-wrap">
-												<a href="#"><img src="images/shareImgs/${list[s.index+1].imgName}" alt=""/></a>
+												<a href="#"><img src="images/shareImgs/${list.imgName}" alt=""/></a>
 											</div>
 											<h3>Cum maiestatis necessitatibus</h3>
 											<div class="info-panel clearfix">
@@ -139,7 +143,7 @@
 											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
 											<a class="btn pull-right" href="#">Read more</a>
 										</div>	
-									</li>
+									</li> --%>
 								</div>
 								</c:forEach>
 								<!-- <div class="row">
@@ -345,7 +349,9 @@
 								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ac interdum ligula. Nullam iaculis dictum ullamcorper. In vitae pellentesque massa. Vivamus viverra libero dapibus, sodales lectus a, consectetur ante. </p>
 							</article>	
 						</div>
-					</div>	
+					</div>
+					</c:otherwise>
+					</c:choose>
 				</div>	
 			</div>	
 		</section>
