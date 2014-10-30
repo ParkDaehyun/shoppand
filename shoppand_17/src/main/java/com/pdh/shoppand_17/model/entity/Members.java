@@ -7,12 +7,16 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "Members")
@@ -47,7 +51,7 @@ public class Members {
     private String profileImg;
 	
 	
-	@ManyToMany(mappedBy = "groupMembers")
+	@ManyToMany(mappedBy = "groupMembers", fetch=FetchType.EAGER)
 	private List<Groups> memberGroups = new ArrayList<Groups>();
 	
 	public Members() {

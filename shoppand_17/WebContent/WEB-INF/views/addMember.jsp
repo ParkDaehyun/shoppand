@@ -91,6 +91,9 @@
 			
         	<div id = "occMem">
                 	<label>Added Members</label>
+                	<c:forEach items="${group.groupMembers}" var="mem">
+                	${mem.email}<br>
+                	</c:forEach>
                 	<hr>
             </div>
             

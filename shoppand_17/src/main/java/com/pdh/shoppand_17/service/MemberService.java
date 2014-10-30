@@ -33,7 +33,6 @@ public class MemberService {
 	}
 	
 	public Members findMember(String email){
-		System.out.println("findmem");
 		return memberRepository.findOne(email);
 	}
 	

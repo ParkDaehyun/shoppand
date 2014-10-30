@@ -4,6 +4,7 @@ package com.pdh.shoppand_17.controller;
 import java.util.HashMap;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,9 +66,13 @@ public class GroupController {
 	}
 	
 	@RequestMapping(value = "/groupadd.do")
-	public String addGroup(@Valid Groups group, BindingResult result, Model model){
+	public String addGroup(@Valid Groups group, BindingResult result, Model model, @ModelAttribute("userInfo")Members member){
 		try{
-			model.addAttribute("group", groupService.addGroup(group));
+			Groups ngroup = groupService.addGroup(group);
+			ngroup.addGroupMember(member);
+			model.addAttribute("group",groupService.updateGroup(ngroup));
+			model.addAttribute("userInfo", memberService.updateMember(member));
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -99,12 +104,17 @@ public class GroupController {
 	@ResponseBody
 	public String addGroupMember(Long groupId, String addmail){
 		String msg = "1";
-		if(memberService.findMember(addmail) instanceof Members){
+		Groups group = groupService.getGroup(groupId);
+		if(memberService.findMember(addmail) instanceof Members ){
 			try{
-				System.out.println(addmail+"dip");
-				groupService.getGroup(groupId).addGroupMember(memberService.findMember(addmail));
-				groupService.updateGroup(groupService.getGroup(groupId));
-				memberService.updateMember(memberService.findMember(addmail));
+				if(group.hasMember(memberService.findMember(addmail))){
+					msg = "2";
+				}else{
+					group.addGroupMember(memberService.findMember(addmail));
+					groupService.updateGroup(group);
+					memberService.updateMember(memberService.findMember(addmail));
+				}
+				//System.out.println(member.getMemberGroups());
 			}catch(Exception e){
 				msg = "2";
 			}

@@ -61,9 +61,9 @@
 									<li><a href="blog-single2.html">Blog single two</a></li>
 								</ul>
 							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
+							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
-									<c:forEach items="${grouplist}" var="group">
+									<c:forEach items="${sessionScope.userInfo.memberGroups}" var="group">
 									<li><a href="groupshare.do?groupId=${group.groupId}">${group.groupName}</a></li>
 									</c:forEach>
 								</ul>
@@ -78,7 +78,8 @@
 		<div class="parallax" style="background-image: url(images/bg1.jpg);">
 			<div class="text">
 				<h1>About us</h1>
-				<p>Who we are</p>
+				<p>Who we are ${sessionScope.userInfo.memberGroups}</p>
+				
 			</div>
 		</div>
 
@@ -430,7 +431,14 @@
 			</div>	
 		</footer>
 		<a class="goTop goTop-link"><i class="icon-angle-up"></i></a>
-		
+		<script type="text/javascript">
+		$(".sessionCheck").click(function() {
+			if ("${sessionScope.userInfo.email}" == ""){ 
+				alert("로그인 후 이용해 주세요.");
+				$(this).attr("href","#");
+			}
+		});
+		</script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 		<script src="js/bootstrap.min.js"></script>

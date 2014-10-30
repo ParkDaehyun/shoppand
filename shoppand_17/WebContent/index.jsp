@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -71,8 +72,14 @@
 									<li><a href="works-single.html">Single project</a></li>
 								</ul>
 							</li>
-							<li><a href="loginForm.do">Login</a>
-							</li>
+							<c:choose>
+								<c:when test="${empty sessionScope.userInfo}">
+									<li><a href="loginForm.do">Login</a></li>
+								</c:when>
+								<c:otherwise>
+									<li><a href="logout.do">${sessionScope.userInfo.email}</a></li>
+								</c:otherwise>
+							</c:choose>
 						</ul>
 					</div>	
 				</div>	

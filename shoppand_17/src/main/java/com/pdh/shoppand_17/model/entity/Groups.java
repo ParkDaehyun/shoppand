@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 
 @Entity
@@ -43,13 +47,14 @@ public class Groups {
     private int groupDate;
 	
 	//@OneToMany(mappedBy = "group")
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "GROUP_MEMBERS",
 			joinColumns=@JoinColumn(name="group_Id"),
 			inverseJoinColumns=@JoinColumn(name="user_email"))
 	private List<Members> groupMembers = new ArrayList<Members>();
 
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@JoinColumn(name = "groupId", nullable = false)
 /*	@IndexColumn(name = "shareId")*/
 	private List<Shares> shares = new ArrayList<Shares>();
@@ -122,6 +127,10 @@ public class Groups {
 	public void addGroupShare(Shares share) {
 		this.shares.add(share);
 		
+	}
+
+	public boolean hasMember(Members findMember) {
+		return this.groupMembers.contains(findMember);
 	}
 
 	

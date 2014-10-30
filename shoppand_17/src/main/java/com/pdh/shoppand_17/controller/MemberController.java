@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +108,12 @@ public class MemberController {
 			url = "login";
 		}
 		return url;
+	}
+	
+	@RequestMapping(value = "/logout.do")
+	public String logOut(HttpSession session){
+		session.invalidate();
+		return "redirect:/index.jsp";
 	}
 		
 }
