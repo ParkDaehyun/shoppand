@@ -77,8 +77,8 @@
 		</div>		
 		<div class="parallax" style="background-image: url(images/bg1.jpg);">
 			<div class="text">
-				<h1>About us</h1>
-				<p>Who we are ${sessionScope.userInfo.memberGroups}</p>
+				<h1>${sessionScope.userInfo.name}</h1>
+				<p>님 환영합니다</p>
 				
 			</div>
 		</div>

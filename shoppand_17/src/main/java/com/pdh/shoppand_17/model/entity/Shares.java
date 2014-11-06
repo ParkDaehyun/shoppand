@@ -45,6 +45,9 @@ public class Shares {
 	@OneToMany(mappedBy = "share")
 	private List<Items> items = new ArrayList<Items>();
 
+	@OneToMany(mappedBy = "share")
+	private List<Replies> replies = new ArrayList<Replies>();
+	
 	public Long getShareId() {
 		return shareId;
 	}
@@ -110,9 +113,22 @@ public class Shares {
 		this.items = items;
 	}
 	
+	public List<Replies> getReplies() {
+		return replies;
+	}
+
+	public void setReplies(List<Replies> replies) {
+		this.replies = replies;
+	}
+
 	public void addItems(Items item) {
 		this.items.add(item);
 		item.setShare(this);
+	}
+	
+	public void addReplies(Replies reply){
+		this.replies.add(reply);
+		reply.setShare(this);
 	}
 
 	@Override

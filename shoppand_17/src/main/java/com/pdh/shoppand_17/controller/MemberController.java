@@ -4,7 +4,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -101,8 +101,6 @@ public class MemberController {
 		try{
 			memberService.login(email, password);
 			model.addAttribute("userInfo", memberService.findMember(email));
-			model.addAttribute("grouplist", memberService.getGroups(email));
-			model.addAttribute("groups",groupService.getAllGroups());
 		}catch(Exception e){
 			System.out.println("err");
 			url = "login";
@@ -111,8 +109,8 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/logout.do")
-	public String logOut(HttpSession session){
-		session.invalidate();
+	public String logOut(SessionStatus sessionstatus){
+		sessionstatus.setComplete();
 		return "redirect:/index.jsp";
 	}
 		

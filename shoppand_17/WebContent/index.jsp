@@ -77,7 +77,7 @@
 									<li><a href="loginForm.do">Login</a></li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="logout.do">${sessionScope.userInfo.email}</a></li>
+									<li><a href="logout.do">${sessionScope.userInfo.email}´Ô ·Î±×¾Æ¿ô</a></li>
 								</c:otherwise>
 							</c:choose>
 						</ul>

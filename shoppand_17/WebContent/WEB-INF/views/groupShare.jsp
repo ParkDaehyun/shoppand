@@ -63,7 +63,7 @@
 							</li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
-									<c:forEach items="${grouplist}" var="group">
+									<c:forEach items="${sessionScope.userInfo.memberGroups}" var="group">
 									<li><a href="groupshare.do?groupId=${group.groupId}">${group.groupName}</a></li>
 									</c:forEach>
 								</ul>

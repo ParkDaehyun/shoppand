@@ -35,12 +35,8 @@ public class GroupController {
 	private MemberService memberService;
 	
 	@RequestMapping(value = "/groupIndex.do")
-	public ModelAndView getAllGroups(@ModelAttribute("userInfo")Members member){
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("grouplist",memberService.getGroups(member.getEmail()));
-		mv.addObject("groups", groupService.getAllGroups());
-		mv.setViewName("about");
-		return mv;
+	public String getAllGroups(){
+		return "about";
 	}
 	
 	@RequestMapping(value = "/groupForm.do")
@@ -128,7 +124,6 @@ public class GroupController {
 	public ModelAndView groupShare(@ModelAttribute("userInfo")Members member, String groupId){
 		System.out.println(Long.parseLong(groupId));
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("grouplist",memberService.getGroups(member.getEmail()));
 		mv.addObject("groups", groupService.getAllGroups());
 		mv.addObject("recentnum", groupService.getGroup(Long.parseLong(groupId)).getShares().size());
 		mv.addObject("shares", groupService.getGroup(Long.parseLong(groupId)).getShares());

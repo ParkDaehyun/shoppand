@@ -86,7 +86,9 @@ public class ShareController {
 	public String keywordSearch(@RequestParam("keyword")String keyword){
 		JSONArray result = null;
 		try {
-			keyword = new String(keyword.getBytes("8859_1"), "UTF-8");
+			System.out.println(keyword);
+			/*keyword = new String(keyword.getBytes("8859_1"), "UTF-8");
+			System.out.println(keyword);*/
 			result = shareService.naverOpenAPI(keyword);
 		} catch(Exception e) {
 			e.printStackTrace();

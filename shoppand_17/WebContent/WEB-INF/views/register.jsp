@@ -103,17 +103,14 @@
 	            <div class="col-md-10">
 	                <input type="file" name="profileImg" id="imgInp" style="width:40%">
 	                <img id="blah" src="#" alt="your image" style="width:40%"/> 
-	                <button type="button" id="profileSM" class="btn btn-info">
-                    Submit
-                	</button>
 	            </div>        
 	        </div>
-       		<div class="checkbox margin-top-20" style="text-align:left">
+       		<!-- <div class="checkbox margin-top-20" style="text-align:left">
 				<label>
 					<input type="checkbox">
 				I agree with the <a href="#">Terms and Conditions</a>.
 				</label>
-			</div> 
+			</div>  -->
 	    	</form>
          <button type="button" id="memberSM" class="btn btn-large btn-block">
             Register
@@ -155,10 +152,6 @@
 			readURL(this);
 			
 		});
-	});
-	
-	$("#profileSM").click(function (e) {
-		$("#profileSM").hide();
 	});
 	
 	$("#memberSM").click(function(e){

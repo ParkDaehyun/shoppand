@@ -3,6 +3,7 @@
 <% request.setCharacterEncoding("utf-8"); %>
 <% response.setContentType("text/html; charset=utf-8"); %>
 <% String toDate = new java.text.SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new java.util.Date()); %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.Date, java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
@@ -68,7 +69,7 @@
 							</li>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
-									<c:forEach items="${grouplist}" var="group">
+									<c:forEach items="${sessionScope.userInfo.memberGroups}" var="group">
 									<li><a href="groupshare.do?groupId=${group.groupId}">${group.groupName}</a></li>
 									</c:forEach>
 								</ul>
@@ -103,7 +104,7 @@
         		<form id="imgUp" enctype="multipart/form-data">
         		<div id="shareImgbox"></div>
 	            <div id="shareImg" style="margin-left:20%; width:60%; height:80%; " >
-	            	<img id="blah"  alt="Please upload your image" style="width:100%; height:100%;"/>
+	            	<img id="blah"  alt="Please upload your image" style="width:100%; height:90%;"/>
 	            </div>
 	            <input type="button" value="Search files" class="btn"/>
 	            <input type="file" name="profileImg" id="imgInp" style="font-size:30px; position:absolute; margin-left:-110px; width:50px; opacity:0;">
@@ -252,7 +253,7 @@
 		img.src = 'images/onmouseframe.png';
 		$("#boxdiv"+img.id).css("border-style","outset");
 		$("#boxdiv"+img.id).css("border-color","rgba(158, 233, 200, 0.53)");
-		alert($("#taggedbox_"+img.id).val());
+		/* alert($("#taggedbox_"+img.id).val()); */
 	}
 	
 	function outmouse(img){
