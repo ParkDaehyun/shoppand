@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.Date, java.text.SimpleDateFormat"%>
@@ -86,18 +86,17 @@
 			 ${group.groupName}
 			<form>
 	            <input type="text" class="form-control" id="emailName">
-		             <button class="btn btn-block" type="button" id="idSearch">Search</button>
+		             <button class="btn" type="button" id="idSearch">Search</button>
             </form>
 			
         	<div id = "occMem">
                 	<label>Added Members</label>
                 	<c:forEach items="${group.groupMembers}" var="mem">
-                	${mem.email}<br>
+                	${mem.email}&nbsp;
                 	</c:forEach>
-                	<hr>
             </div>
-            
-            <button class="btn btn-block" type="button" id="done" onclick="location.href='groupIndex.do'">Done</button> 
+            <br>
+            <button class="btn btn-block" type="button" id="done" onclick="location.href='groupshare.do?groupId=${group.groupId}'">Done</button> 
         </div>
         </div>
 				
@@ -117,13 +116,6 @@
                      
                         
                         
-                </div>
-                
-                
-               
-            </div>
-        </div>
-    </div>    
 	<script type="text/javascript">
 		
 		$("#idSearch").click(function(e){
@@ -134,11 +126,11 @@
 				data : "addmail="+$("#emailName").val() + "&groupId=${group.groupId}",
 				success : function(data){
 					if(data == "1"){
-						alert($("#emailName").val()+"´ÔÀÌ µî·ÏµÇ¾ú½À´Ï´Ù.");
+						alert($("#emailName").val()+"ë‹˜ì´ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.");
 						$("#occMem").append($("#emailName").val() + "<br>");
 						//$("#groupMem").append("<input name='groupMembers[${status.index}]' value="+ gmagak +">");
 					}else{
-						alert($("#emailName").val()+"´ÔÀº µî·ÏÇÒ ¼ö ¾ø´Â »ç¿ëÀÚÀÔ´Ï´Ù.");
+						alert($("#emailName").val()+"ë‹˜ì€ ë“±ë¡í•  ìˆ˜ ì—†ëŠ” ì‚¬ìš©ìì…ë‹ˆë‹¤.");
 						$("#emailName").val("");
 					}
 				},

@@ -37,6 +37,12 @@ public class Shares {
 	@Column
 	private String info;
 	
+	@Column
+	private int replyCount;
+	
+	@Column
+	private int accessAuth;
+	
 	@ManyToOne
 	@JoinColumn(name = "groupId", updatable = false, insertable = false)
 	private Groups group;
@@ -96,6 +102,22 @@ public class Shares {
 		this.info = info;
 	}
 	
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+	
+	public int getaccessAuth() {
+		return accessAuth;
+	}
+
+	public void setaccessAuth(int accessAuth) {
+		this.accessAuth = accessAuth;
+	}
+
 	public Groups getGroup() {
 		return group;
 	}
@@ -129,6 +151,11 @@ public class Shares {
 	public void addReplies(Replies reply){
 		this.replies.add(reply);
 		reply.setShare(this);
+	}
+	
+	public boolean isAccessible(int flag){
+		if(flag == 1) {return true;}
+		else{return false;}
 	}
 
 	@Override

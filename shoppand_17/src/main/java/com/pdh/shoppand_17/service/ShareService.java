@@ -110,4 +110,16 @@ public class ShareService {
 	public Shares saveShare(Shares share) {
 		return shareRepository.save(share);
 	}
+
+	public java.util.List<Shares> getMemberGroupShare(String email) {
+		return shareRepository.getMemberGroupShare(email);
+	}
+	
+	public java.util.List<Shares> getMemberShare(String email) {
+		return shareRepository.findByWriter(email);
+	}
+
+	public java.util.List<Shares> getMemberAuthShare(String email) {
+		return shareRepository.findByWriterAndAccessAuth(email, 1);
+	}
 }

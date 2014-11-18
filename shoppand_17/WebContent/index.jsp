@@ -41,7 +41,14 @@
 					<a class="brand goTop" href="#">Shoppand</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li class="active"><a href="index.jsp">Home</a></li>
+							<c:choose>
+								<c:when test="${empty sessionScope.userInfo}">
+									<li class="active"><a href="index.jsp">Home</a></li>
+								</c:when>
+								<c:otherwise>
+									<li class="active"><a href="groupIndex.do">Home</a></li>
+								</c:otherwise>
+							</c:choose>
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="about.html">About Us</a></li>
@@ -63,20 +70,19 @@
 									<li><a href="blog-single2.html">Blog single two</a></li>
 								</ul>
 							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Gallery <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="works.html">Simple gallery</a></li>
-									<li><a href="works2.html">With text</a></li>
-									<li><a href="works3.html">With filter</a></li>
-									<li class="divider"></li>
-									<li><a href="works-single.html">Single project</a></li>
-								</ul>
-							</li>
+							
 							<c:choose>
 								<c:when test="${empty sessionScope.userInfo}">
 									<li><a href="loginForm.do">Login</a></li>
 								</c:when>
 								<c:otherwise>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu">
+											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
+												<li><a href="groupshare.do?groupId=${groups.groupId}">${groups.groupName}</a></li>
+											</c:forEach>
+										</ul>
+									</li>
 									<li><a href="logout.do">${sessionScope.userInfo.email}´Ô ·Î±×¾Æ¿ô</a></li>
 								</c:otherwise>
 							</c:choose>
@@ -93,7 +99,7 @@
 		</div>
 
 		<section class="text-block">
-			<div class="features text-center dark-bg">
+			<!-- <div class="features text-center dark-bg">
 				<div class="container">
 					<div class="row-fluid">
 						<article class="span3">
@@ -122,7 +128,7 @@
 						</article>
 					</div>
 				</div>	
-			</div>	
+			</div>	 -->
 			<div class="light-bg">
 				<div class="container">
 					<h2 class="with-border">Latest Projects</h2>

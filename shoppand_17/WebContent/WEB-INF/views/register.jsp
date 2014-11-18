@@ -1,6 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -39,39 +40,28 @@
 					<a class="brand goTop" href="#">Griny</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li><a href="index.jsp">Home</a></li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="about.html">About Us</a></li>
-									<li><a href="services.html">Services</a></li>
-									<li><a href="price.html">Price</a></li>
-									<li><a href="login.html">Login</a></li>
-									<li class="active"><a href="register.html">Register</a></li>
-									<li><a href="faq.html">F.A.Q.</a></li>
-									<li><a href="contacts.html">Contact</a></li>
-								</ul>
-							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="blog-right.html">Blog right sidebar</a></li>
-									<li><a href="blog-left.html">Blog left sidebar</a></li>
-									<li><a href="blog-full.html">Blog full</a></li>
-									<li class="divider"></li>
-									<li><a href="blog-single.html">Blog single one</a></li>
-									<li><a href="blog-single2.html">Blog single two</a></li>
-								</ul>
-							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Gallery <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="works.html">Simple gallery</a></li>
-									<li><a href="works2.html">With text</a></li>
-									<li><a href="works3.html">With filter</a></li>
-									<li class="divider"></li>
-									<li><a href="works-single.html">Single project</a></li>
-								</ul>
-							</li>
-							<li><a href="shortcodes.html">Shortcodes</a>
-							</li>
+							<c:choose>
+								<c:when test="${empty sessionScope.userInfo}">
+									<li class="active"><a href="index.jsp">Home</a></li>
+									<li><a href="loginForm.do">Login</a></li>
+								</c:when>
+								<c:otherwise>
+									<li class="active"><a href="groupIndex.do">Home</a></li>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">About Me</a></li>
+										</ul>
+									</li>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu">
+											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
+												<li><a href="groupshare.do?groupId=${groups.groupId}">${groups.groupName}</a></li>
+											</c:forEach>
+										</ul>
+									</li>
+									<li><a href="logout.do">${sessionScope.userInfo.name}ë‹˜ ë¡œê·¸ì•„ì›ƒ</a></li>
+								</c:otherwise>
+							</c:choose>
 						</ul>
 					</div>	
 				</div>	
@@ -134,21 +124,21 @@
 	$(document).ready(function(){
 	    function readURL(input) {
 	        if (input.files && input.files[0]) {
-	            var reader = new FileReader(); //ÆÄÀÏÀ» ÀĞ±â À§ÇÑ FileReader°´Ã¼ »ı¼º
+	            var reader = new FileReader(); //íŒŒì¼ì„ ì½ê¸° ìœ„í•œ FileReaderê°ì²´ ìƒì„±
 	            reader.onload = function (e) { 
-	            //ÆÄÀÏ ÀĞ¾îµéÀÌ±â¸¦ ¼º°øÇßÀ»¶§ È£ÃâµÇ´Â ÀÌº¥Æ® ÇÚµé·¯
+	            //íŒŒì¼ ì½ì–´ë“¤ì´ê¸°ë¥¼ ì„±ê³µí–ˆì„ë•Œ í˜¸ì¶œë˜ëŠ” ì´ë²¤íŠ¸ í•¸ë“¤ëŸ¬
 	                $('#blah').attr('src', e.target.result);
-	                //ÀÌ¹ÌÁö TagÀÇ SRC¼Ó¼º¿¡ ÀĞ¾îµéÀÎ File³»¿ëÀ» ÁöÁ¤
-	                //(¾Æ·¡ ÄÚµå¿¡¼­ ÀĞ¾îµéÀÎ dataURLÇü½Ä)
+	                //ì´ë¯¸ì§€ Tagì˜ SRCì†ì„±ì— ì½ì–´ë“¤ì¸ Fileë‚´ìš©ì„ ì§€ì •
+	                //(ì•„ë˜ ì½”ë“œì—ì„œ ì½ì–´ë“¤ì¸ dataURLí˜•ì‹)
 	            };                   
 	            reader.readAsDataURL(input.files[0]);
-	            //File³»¿ëÀ» ÀĞ¾î dataURLÇü½ÄÀÇ ¹®ÀÚ¿­·Î ÀúÀå
+	            //Fileë‚´ìš©ì„ ì½ì–´ dataURLí˜•ì‹ì˜ ë¬¸ìì—´ë¡œ ì €ì¥
     	    }
 		}//readURL()--
 
-		//file ¾ç½ÄÀ¸·Î ÀÌ¹ÌÁö¸¦ ¼±ÅÃ(°ªÀÌ º¯°æ) µÇ¾úÀ»¶§ Ã³¸®ÇÏ´Â ÄÚµå
+		//file ì–‘ì‹ìœ¼ë¡œ ì´ë¯¸ì§€ë¥¼ ì„ íƒ(ê°’ì´ ë³€ê²½) ë˜ì—ˆì„ë•Œ ì²˜ë¦¬í•˜ëŠ” ì½”ë“œ
 		$("#imgInp").change(function(e){
-			alert(this.value); //¼±ÅÃÇÑ ÀÌ¹ÌÁö °æ·Î Ç¥½Ã
+			alert(this.value); //ì„ íƒí•œ ì´ë¯¸ì§€ ê²½ë¡œ í‘œì‹œ
 			readURL(this);
 			
 		});
@@ -158,7 +148,7 @@
 		var form = $('#imgUp');
 		form.ajaxSubmit({
 			url: 'profileUp.do',
-			data: form.serialize(),  //ÆûÀÇ °ªµéÀ» ÁÖ¼ÒÈ­ÇÏ¿© º¸³»°Ô µË´Ï´Ù.
+			data: form.serialize(),  //í¼ì˜ ê°’ë“¤ì„ ì£¼ì†Œí™”í•˜ì—¬ ë³´ë‚´ê²Œ ë©ë‹ˆë‹¤.
 			type: 'post',     
 			success: function(data){
 				console.log(data);
@@ -175,11 +165,11 @@
 			form.submit(function(e){
 				$.ajax({
 					url: 'profileUp.do',
-					data: form.serialize(),  //ÆûÀÇ °ªµéÀ» ÁÖ¼ÒÈ­ÇÏ¿© º¸³»°Ô µË´Ï´Ù.
+					data: form.serialize(),  //í¼ì˜ ê°’ë“¤ì„ ì£¼ì†Œí™”í•˜ì—¬ ë³´ë‚´ê²Œ ë©ë‹ˆë‹¤.
 					type: 'POST',     
 					success: function(data){
-						$('#imgInp').val('');                           //file input¿¡ µé¾î°¡ ÀÖ´Â °ªÀ» ºñ¿öÁİ´Ï´Ù.
-						console.log(data);                      //¾÷·Îµå µÇ¾ú´Ù¸é °á°ú¸¦ ÄÜ¼Ö¿¡ Ãâ·ÂÇØº¾´Ï´Ù.
+						$('#imgInp').val('');                           //file inputì— ë“¤ì–´ê°€ ìˆëŠ” ê°’ì„ ë¹„ì›Œì¤ë‹ˆë‹¤.
+						console.log(data);                      //ì—…ë¡œë“œ ë˜ì—ˆë‹¤ë©´ ê²°ê³¼ë¥¼ ì½˜ì†”ì— ì¶œë ¥í•´ë´…ë‹ˆë‹¤.
 					}
 				});
 			});

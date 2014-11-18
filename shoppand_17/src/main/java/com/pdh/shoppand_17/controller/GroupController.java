@@ -2,9 +2,8 @@ package com.pdh.shoppand_17.controller;
 
 
 import java.util.HashMap;
+import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,8 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.pdh.shoppand_17.model.entity.Groups;
 import com.pdh.shoppand_17.model.entity.Members;
+import com.pdh.shoppand_17.model.entity.Shares;
 import com.pdh.shoppand_17.service.GroupService;
 import com.pdh.shoppand_17.service.MemberService;
+import com.pdh.shoppand_17.service.ReplyService;
+import com.pdh.shoppand_17.service.ShareService;
 
 @Controller
 @SessionAttributes("userInfo")
@@ -33,10 +34,15 @@ public class GroupController {
 	private GroupService groupService;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private ReplyService replyService;
+	@Autowired
+	private ShareService shareService;
 	
 	@RequestMapping(value = "/groupIndex.do")
-	public String getAllGroups(){
-		return "about";
+	public String getAllGroups(@ModelAttribute("userInfo")Members member, Model model){
+		model.addAttribute("shares", shareService.getMemberGroupShare(member.getEmail()));
+		return "userGroups";
 	}
 	
 	@RequestMapping(value = "/groupForm.do")
@@ -61,19 +67,29 @@ public class GroupController {
 		return gson.toJson(hm);
 	}
 	
-	@RequestMapping(value = "/groupadd.do")
+	@RequestMapping(value = "/groupadd.do", produces="text/plain;charset=UTF-8")
 	public String addGroup(@Valid Groups group, BindingResult result, Model model, @ModelAttribute("userInfo")Members member){
 		try{
 			Groups ngroup = groupService.addGroup(group);
 			ngroup.addGroupMember(member);
-			model.addAttribute("group",groupService.updateGroup(ngroup));
+			groupService.updateGroup(ngroup);
 			model.addAttribute("userInfo", memberService.updateMember(member));
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "addMember";
+		return "redirect:/groupshare.do?groupId=" + group.getGroupId();
 	}
+	
+	@RequestMapping(value = "/addMemberForm.do")
+	public ModelAndView addMemberForm(String groupId){
+		return new ModelAndView("addMember", "group", groupService.getGroup(Long.parseLong(groupId)));
+	}
+/*	
+	@RequestMapping(value = "/aboutGroup.do")
+	public String groupView(String groupId, Model model){
+		model.addAttribute("group", groupService.getGroup(Long.parseLong(groupId)));
+		return "aboutGroup";
+	}*/
 	
 	@RequestMapping(value = "/chkGroupMember.do", method = RequestMethod.POST)
 	@ResponseBody
@@ -124,10 +140,12 @@ public class GroupController {
 	public ModelAndView groupShare(@ModelAttribute("userInfo")Members member, String groupId){
 		System.out.println(Long.parseLong(groupId));
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("groups", groupService.getAllGroups());
+		//mv.addObject("groups", groupService.getAllGroups());
 		mv.addObject("recentnum", groupService.getGroup(Long.parseLong(groupId)).getShares().size());
-		mv.addObject("shares", groupService.getGroup(Long.parseLong(groupId)).getShares());
+		//mv.addObject("shares", groupService.getGroup(Long.parseLong(groupId)).getShares());
 		mv.addObject("group", groupService.getGroup(Long.parseLong(groupId)));
+		mv.addObject("recentComm", replyService.getRecentComm(Long.parseLong(groupId)));
+				//getRecentComm(groupId));
 		mv.setViewName("groupShare");
 		return mv;
 	}

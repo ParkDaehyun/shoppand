@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("utf-8"); %>
 <% response.setContentType("text/html; charset=utf-8"); %>
-<% String toDate = new java.text.SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new java.util.Date()); %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.Date, java.text.SimpleDateFormat"%>
@@ -86,15 +86,21 @@
 			<form:form commandName="share" id="shareForm" action="shareUp.do" method="post">
 			<div class="text no-animate" style="height:80%; width:30%; margin-left:-45%; position:absolute;">
 			<!-- 	<h1>Share Upload</h1><br> -->
-	        <form:hidden path="writer" value="${userInfo.email}"/>
-	        <form:hidden path="writingDate" value="${toDate}"/>
+	        <form:hidden path="writer" value="${userInfo.name}"/>
+	        <% String toDate = new java.text.SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new java.util.Date()); %>
+	        <form:hidden path="writingDate" value="<%=toDate%>"/>
+	        <form:hidden path="replyCount" value="0"/>
 	        <form:input path="title" class="input-block-level" id="title" placeholder="Title"/>
 	        <form:hidden path="imgName" id="imgName"/>
-	    	<form:input path="info" class="input-block-level" id="info" placeholder="Comments" style="height:80%;"/>
+	    	<form:textarea path="info" class="input-block-level" id="info" placeholder="Comments" style="height:80%; background:url('img/bg-overlay.png'); border-color:#87989E; color:#fff;" wrap="hard" cols="20"/>
 	    	<form:hidden path="items" id="ilist"/>
 	    	<form:hidden path="group" value="${group.groupId}"/>
+	    	<form:select path="accessAuth">
+	    		<form:option value="1" label="모두에게 공개"></form:option>
+	    		<form:option value="0" label="그룹에만 공개"></form:option>
+	    	</form:select>
 	    	<button type="button" id="shareSM" class="btn btn-large btn-block" >
-	            Post ${group.groupId}
+	            Post
 	         </button>
 	    	</div>
 	    	</form:form>

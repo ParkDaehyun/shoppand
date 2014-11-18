@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.Date, java.text.SimpleDateFormat"%>
@@ -29,7 +29,7 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-		<% String toDate = new java.text.SimpleDateFormat("yyyy.MM.dd     HH:mm:ss").format(new java.util.Date()); %>
+		<% String toDate = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date()); %>
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container">
@@ -41,37 +41,28 @@
 					<a class="brand goTop" href="#">Griny</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li><a href="index.jsp">Home</a></li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="about.html">About Us</a></li>
-									<li><a href="services.html">Services</a></li>
-									<li><a href="price.html">Price</a></li>
-									<li><a href="login.html">Login</a></li>
-									<li class="active"><a href="register.html">Register</a></li>
-									<li><a href="faq.html">F.A.Q.</a></li>
-									<li><a href="contacts.html">Contact</a></li>
-								</ul>
-							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="blog-right.html">Blog right sidebar</a></li>
-									<li><a href="blog-left.html">Blog left sidebar</a></li>
-									<li><a href="blog-full.html">Blog full</a></li>
-									<li class="divider"></li>
-									<li><a href="blog-single.html">Blog single one</a></li>
-									<li><a href="blog-single2.html">Blog single two</a></li>
-								</ul>
-							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<c:forEach items="${sessionScope.userInfo.memberGroups}" var="group">
-									<li><a href="groupshare.do?groupId=${group.groupId}">${group.groupName}</a></li>
-									</c:forEach>
-								</ul>
-							</li>
-							<li><a href="shortcodes.html">Shortcodes</a>
-							</li>
+							<c:choose>
+								<c:when test="${empty sessionScope.userInfo}">
+									<li class="active"><a href="index.jsp">Home</a></li>
+									<li><a href="loginForm.do">Login</a></li>
+								</c:when>
+								<c:otherwise>
+									<li class="active"><a href="groupIndex.do">Home</a></li>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">About Me</a></li>
+										</ul>
+									</li>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu">
+											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
+												<li><a href="groupshare.do?groupId=${groups.groupId}">${groups.groupName}</a></li>
+											</c:forEach>
+										</ul>
+									</li>
+									<li><a href="logout.do">${sessionScope.userInfo.name}님 로그아웃</a></li>
+								</c:otherwise>
+							</c:choose>
 						</ul>
 					</div>	
 				</div>	
@@ -84,10 +75,10 @@
 			<form:form commandName="newgroup" action="groupadd.do" method="post" id="groupadd">
 	        <form:input path="groupName" class="input-block-level" id="groupName" placeholder="Group Name"/>
 	        <form:hidden path="founder" value="${userInfo.email}"/>
-	        <form:hidden path="groupDate" value="${toDate}"/>
+	        <form:hidden path="groupDate" value="<%=toDate%>"/>
         	</form:form>
 	         <button type="button" id="duplcheck" class="btn btn-large btn-block">
-	          		  �ߺ�Ȯ��
+	          		  중복확인
 	         </button>
         </div>
         </div>

@@ -44,7 +44,7 @@ public class Groups {
 	
 	@Column
     @NotNull
-    private int groupDate;
+    private String groupDate;
 	
 	//@OneToMany(mappedBy = "group")
 	@ManyToMany(fetch=FetchType.EAGER)
@@ -84,11 +84,11 @@ public class Groups {
 		this.groupName = groupName;
 	}
 
-	public int getGroupDate() {
+	public String getGroupDate() {
 		return groupDate;
 	}
 
-	public void setGroupDate(int groupDate) {
+	public void setGroupDate(String groupDate) {
 		this.groupDate = groupDate;
 	}
 

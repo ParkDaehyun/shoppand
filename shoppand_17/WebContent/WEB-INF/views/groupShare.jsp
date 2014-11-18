@@ -39,37 +39,28 @@
 					<a class="brand goTop" href="#">Griny</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li><a href="index.jsp">Home</a></li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="about.html">About Us</a></li>
-									<li><a href="services.html">Services</a></li>
-									<li><a href="price.html">Price</a></li>
-									<li><a href="login.html">Login</a></li>
-									<li><a href="register.html">Register</a></li>
-									<li><a href="faq.html">F.A.Q.</a></li>
-									<li><a href="contacts.html">Contact</a></li>
-								</ul>
-							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li class="active"><a href="blog-right.html">Blog right sidebar</a></li>
-									<li><a href="blog-left.html">Blog left sidebar</a></li>
-									<li><a href="blog-full.html">Blog full</a></li>
-									<li class="divider"></li>
-									<li><a href="blog-single.html">Blog single one</a></li>
-									<li><a href="blog-single2.html">Blog single two</a></li>
-								</ul>
-							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<c:forEach items="${sessionScope.userInfo.memberGroups}" var="group">
-									<li><a href="groupshare.do?groupId=${group.groupId}">${group.groupName}</a></li>
-									</c:forEach>
-								</ul>
-							</li>
-							<li><a href="shortcodes.html">Shortcodes</a>
-							</li>
+							<c:choose>
+								<c:when test="${empty sessionScope.userInfo}">
+									<li class="active"><a href="index.jsp">Home</a></li>
+									<li><a href="loginForm.do">Login</a></li>
+								</c:when>
+								<c:otherwise>
+									<li class="active"><a href="groupIndex.do">Home</a></li>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">About Me</a></li>
+										</ul>
+									</li>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu">
+											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
+												<li><a href="groupshare.do?groupId=${groups.groupId}">${groups.groupName}</a></li>
+											</c:forEach>
+										</ul>
+									</li>
+									<li><a href="logout.do">${sessionScope.userInfo.name}님 로그아웃</a></li>
+								</c:otherwise>
+							</c:choose>
 						</ul>
 					</div>	
 				</div>	
@@ -90,7 +81,7 @@
 				<div class="container">
 					<h2 class="with-border"> Shares <small class="color">/ write something</small><a class="btn pull-right" href="shareUploadForm.do?groupId=${group.groupId}">Post</a></h2>
 					<c:choose>
-					<c:when test="${empty shares}">
+					<c:when test="${empty group.shares}">
 							없어
 					</c:when>
 					<c:otherwise>
@@ -100,21 +91,21 @@
 								<li class="span12">
 									<div class="thumbnail">
 										<div class="img-wrap">
-											<a href="#"><img src="images/shareImgs/${shares[recentnum-1].imgName}" alt=""/></a>
+											<a href="#"><img src="images/shareImgs/${group.shares[recentnum-1].imgName}" alt=""/></a>
 										</div>	
-										<h3>${shares[recentnum-1].title}</h3>
+										<h3>${group.shares[recentnum-1].title}</h3>
 										<div class="info-panel clearfix">
 											<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-											<span class="pull-right"><i class="icon-user"></i> ${shares[recentnum-1].writer}</span>
+											<span class="pull-right"><i class="icon-user"></i> ${group.shares[recentnum-1].writer}</span>
 										</div>	
-										<p>${shares[recentnum-1].info}</p>
-										<a class="btn pull-right" href="sharecontent.do?shareId=${shares[recentnum-1].shareId}">Read more</a>
+										<p>${group.shares[recentnum-1].info}</p>
+										<a class="btn pull-right" href="sharecontent.do?shareId=${group.shares[recentnum-1].shareId}">Read more</a>
 									</div>	
 								</li>
-								<c:forEach var="list" items="${shares}" begin="0" step="2" varStatus="s" end="${recentnum-1}">
+								<c:forEach var="list" items="${group.shares}" begin="0" step="2" varStatus="s" end="${recentnum-1}">
 								
 								<div class="row">
-									<c:forEach var="inlist" items="${shares}" begin="${s.index}" end="${s.index+1}">
+									<c:forEach var="inlist" items="${group.shares}" begin="${s.index}" end="${s.index+1}">
 									<li class="span6">
 										<div class="thumbnail">
 											<div class="img-wrap">
@@ -303,19 +294,22 @@
 							<article class="section">
 								<h4 class="with-border">Recent Comments</h4>
 								<ul class="media-list">
+									<c:forEach items="${recentComm}" var="reply" >
 									<li class="media comments">
 										<a class="pull-left" href="#">
-											<img class="media-object" src="images/team.jpg">
+											<img class="media-object" src="images/profileImgs/${reply.member.profileImg}">
 										</a>
 										<div class="media-body">
 											<h5>
-												<a href="#">Rick</a>
+												<a href="#">${reply.member.name}</a>
 												in
-												<a href="#">Lorem ipsum dolor sit amet</a>
+												<a href="sharecontent.do?shareId=${reply.share.shareId}">${reply.share.title}</a>
 											</h5>
-											<p>In ante dui, pharetra vestibulum massa vel, gravida commodo diam. Ut vulputate egestas odio ac blandit...</p>
+											<p>${reply.rpContents}</p>
 										</div>
 									</li>
+									</c:forEach>
+									<!-- 
 									<li class="media comments">
 										<a class="pull-left" href="#">
 											<img class="media-object" src="images/team2.jpg">
@@ -341,7 +335,7 @@
 											</h5>
 											<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus...</p>
 										</div>
-									</li>
+									</li> -->
 								</ul>
 							</article>	
 							<article class="section">
@@ -352,8 +346,66 @@
 					</div>
 					</c:otherwise>
 					</c:choose>
+				</div>
+					
+			</div>
+			<div class="dark-bg">
+				<div class="container">
+					<h2 class="with-border">Meet our Team</h2>
+					<ul class="thumbnails section">
+							<div class="row">
+								<c:forEach items="${group.groupMembers}" var="g">
+								<c:choose>
+									<c:when test="${g.email == group.founder}" >
+									<li class="span4">
+										<div class="thumbnail">
+											<div class="img-wrap">
+												<div class="black-bg">
+													<div class="hover-block">
+														<h4>Have a question? Write!</h4>
+														<ul class="link-block">
+															<li><a href="#"><i class="icon-linkedin-sign"></i></a></li>
+															<li><a href="#"><i class="icon-twitter-sign"></i></a></li>
+															<li><a href="#"><i class="icon-facebook-sign"></i></a></li>
+															<li><a href="#"><i class="icon-google-plus-sign"></i></a></li>
+														</ul>
+													</div>
+												</div>
+												<img src="images/profileImgs/${g.profileImg}" alt=""/>
+											</div>	
+											<h3 class="with-border"><a href="aboutUser.do?user=${g.email}">${g.name}</a> <small class="color">- 그룹장</small></h3>
+											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
+										</div>	
+									</li>
+									</c:when>
+									<c:otherwise>
+									<li class="span4">
+										<div class="thumbnail">
+											<div class="img-wrap">
+												<div class="black-bg">
+													<div class="hover-block">
+														<h4>Have a question? Write!</h4>
+														<ul class="link-block">
+															<li><a href="#"><i class="icon-linkedin-sign"></i></a></li>
+															<li><a href="#"><i class="icon-twitter-sign"></i></a></li>
+															<li><a href="#"><i class="icon-facebook-sign"></i></a></li>
+															<li><a href="#"><i class="icon-google-plus-sign"></i></a></li>
+														</ul>
+													</div>
+												</div>
+												<img src="images/profileImgs/${g.profileImg}" alt=""/>
+											</div>	
+											<h3 class="with-border"><a href="aboutUser.do?user=${g.email}">${g.name}</a>  <small class="color">- 그룹원</small></h3>
+											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
+										</div>	
+									</li>
+									</c:otherwise>
+								</c:choose>
+								</c:forEach>
+							</div>	
+						</ul>
 				</div>	
-			</div>	
+			</div>
 		</section>
 
 
@@ -366,7 +418,7 @@
 							<h4>Nullam iaculis dictum ullamcorper. In vitae pellentesque massa. Vivamus viverra libero dapibus, sodales lectus a, consectetur ante.</h4>
 						</div>
 						<div class="span3">
-							<a class="btn btn-large" href="#">Contact us</a>
+							<a class="btn btn-large" href="addMemberForm.do?groupId=${group.groupId}">그룹원 추가하기</a>
 						</div>
 					</div>
 				</div>
