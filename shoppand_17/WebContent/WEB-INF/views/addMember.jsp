@@ -96,7 +96,7 @@
                 	</c:forEach>
             </div>
             <br>
-            <button class="btn btn-block" type="button" id="done" onclick="location.href='groupshare.do?groupId=${group.groupId}'">Done</button> 
+            <button class="btn btn-block" type="button" id="done" onclick="location.href='groupshare.do?groupId=${group.groupId}&pageNum=1'">Done</button> 
         </div>
         </div>
 				

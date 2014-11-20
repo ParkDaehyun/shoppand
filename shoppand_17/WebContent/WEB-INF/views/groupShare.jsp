@@ -54,7 +54,7 @@
 									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
 											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
-												<li><a href="groupshare.do?groupId=${groups.groupId}">${groups.groupName}</a></li>
+												<li><a href="groupshare.do?groupId=${groups.groupId}&pageNum=0">${groups.groupName}</a></li>
 											</c:forEach>
 										</ul>
 									</li>
@@ -81,7 +81,7 @@
 				<div class="container">
 					<h2 class="with-border"> Shares <small class="color">/ write something</small><a class="btn pull-right" href="shareUploadForm.do?groupId=${group.groupId}">Post</a></h2>
 					<c:choose>
-					<c:when test="${empty group.shares}">
+					<c:when test="${empty shares}">
 							없어
 					</c:when>
 					<c:otherwise>
@@ -91,121 +91,66 @@
 								<li class="span12">
 									<div class="thumbnail">
 										<div class="img-wrap">
-											<a href="#"><img src="images/shareImgs/${group.shares[recentnum-1].imgName}" alt=""/></a>
+											<a href="sharecontent.do?shareId=${shares[0].shareId}"><img src="images/shareImgs/${shares[0].imgName}" alt=""/></a>
 										</div>	
-										<h3>${group.shares[recentnum-1].title}</h3>
+										<h3>${shares[0].title}</h3>
 										<div class="info-panel clearfix">
-											<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-											<span class="pull-right"><i class="icon-user"></i> ${group.shares[recentnum-1].writer}</span>
+											<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> ${shares[0].writingDate}</time></span>
+											<span class="pull-right"><i class="icon-user"></i> ${shares[0].writer}</span>
 										</div>	
-										<p>${group.shares[recentnum-1].info}</p>
-										<a class="btn pull-right" href="sharecontent.do?shareId=${group.shares[recentnum-1].shareId}">Read more</a>
+										<p>${shares[0].info}</p>
+										<a class="btn pull-right" href="sharecontent.do?shareId=${shares[0].shareId}">더 읽기</a>
 									</div>	
 								</li>
-								<c:forEach var="list" items="${group.shares}" begin="0" step="2" varStatus="s" end="${recentnum-1}">
-								
-								<div class="row">
-									<c:forEach var="inlist" items="${group.shares}" begin="${s.index}" end="${s.index+1}">
-									<li class="span6">
-										<div class="thumbnail">
-											<div class="img-wrap">
-												<a href="#"><img src="images/shareImgs/${inlist.imgName}" alt=""/></a>
+								<c:forEach var="list" items="${shares}" begin="0" step="2" varStatus="s" end="${size-1}">
+									<%-- <c:forEach var="eight" items="${group.shares}" varStatus="s2" step="2" begin="${s.index}" end="${s.index+3}"> --%>
+									<div class="row">
+										<c:forEach var="inlist" items="${shares}" begin="${s.index}" end="${s.index+1}">
+										<li class="span6">
+											<div class="thumbnail">
+												<div class="img-wrap">
+													<a href="sharecontent.do?shareId=${inlist.shareId}"><img src="images/shareImgs/${inlist.imgName}" alt=""/></a>
+												</div>	
+												<h3>${inlist.title}</h3>
+												<div class="info-panel clearfix">
+													<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> ${inlist.writingDate}</time></span>
+													<span class="pull-right"><i class="icon-user"></i>${inlist.writer}</span>
+												</div>	
+												<p>${inlist.info}</p>
+												<a class="btn pull-right" href="sharecontent.do?shareId=${inlist.shareId}">더 읽기</a>
 											</div>	
-											<h3>${inlist.title}</h3>
-											<div class="info-panel clearfix">
-												<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-												<span class="pull-right"><i class="icon-user"></i>${inlist.writer}</span>
+										</li>
+										</c:forEach>
+										
+										
+										<%-- <li class="span6">
+											<div class="thumbnail">
+												<div class="img-wrap">
+													<a href="#"><img src="images/shareImgs/${list.imgName}" alt=""/></a>
+												</div>
+												<h3>Cum maiestatis necessitatibus</h3>
+												<div class="info-panel clearfix">
+													<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
+													<span class="pull-right"><i class="icon-user"></i> By Rick </span>
+												</div>	
+												<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
+												<a class="btn pull-right" href="#">Read more</a>
 											</div>	
-											<p>${inlist.info}</p>
-											<a class="btn pull-right" href="sharecontent.do?shareId=${inlist.shareId}">Read more</a>
-										</div>	
-									</li>
-									</c:forEach>
-									<%-- <li class="span6">
-										<div class="thumbnail">
-											<div class="img-wrap">
-												<a href="#"><img src="images/shareImgs/${list.imgName}" alt=""/></a>
-											</div>
-											<h3>Cum maiestatis necessitatibus</h3>
-											<div class="info-panel clearfix">
-												<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-												<span class="pull-right"><i class="icon-user"></i> By Rick </span>
-											</div>	
-											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
-											<a class="btn pull-right" href="#">Read more</a>
-										</div>	
-									</li> --%>
-								</div>
+										</li> --%>
+									</div>
+									
+									<%-- </c:forEach> --%>
 								</c:forEach>
-								<!-- <div class="row">
-									<li class="span6">
-										<div class="thumbnail">
-											<div class="img-wrap">
-												<a href="#"><img src="images/team3.jpg" alt=""/></a>
-											</div>
-											<h3>Dicat tantas copiosae eam id</h3>
-											<div class="info-panel clearfix">
-												<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-												<span class="pull-right"><i class="icon-user"></i> By Rick </span>
-											</div>	
-											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
-											<a class="btn pull-right" href="#">Read more</a>
-										</div>	
-									</li>
-									<li class="span6">
-										<div class="thumbnail">
-											<div class="img-wrap">
-												<a href="#"><img src="images/image_4.jpg" alt=""/></a>
-											</div>
-											<h3>Theophrastus, dicat tantas</h3>
-											<div class="info-panel clearfix">
-												<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-												<span class="pull-right"><i class="icon-user"></i> By Rick </span>
-											</div>	
-											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
-											<a class="btn pull-right" href="#">Read more</a>
-										</div>	
-									</li>
-								</div>	
-								<div class="row">
-									<li class="span6">
-										<div class="thumbnail">
-											<div class="img-wrap">
-												<a href="#"><img src="images/image_5.jpg" alt=""/></a>
-											</div>	
-											<h3>Metus elit, consectetur sed</h3>
-											<div class="info-panel clearfix">
-												<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-												<span class="pull-right"><i class="icon-user"></i> By Rick </span>
-											</div>	
-											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
-											<a class="btn pull-right" href="#">Read more</a>
-										</div>	
-									</li>
-									<li class="span6">
-										<div class="thumbnail">
-											<div class="img-wrap">
-												<a href="#"><img src="images/image_6.jpg" alt=""/></a>
-											</div>
-											<h3>Lorem ipsum dolor sit amet</h3>
-											<div class="info-panel clearfix">
-												<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-												<span class="pull-right"><i class="icon-user"></i> By Rick </span>
-											</div>	
-											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
-											<a class="btn pull-right" href="#">Read more</a>
-										</div>	
-									</li>
-								</div>	 -->
+								
 							</ul>	
 							<div class="pagination">
 								<ul>
 									<li class="disabled"><a href="#">Prev</a></li>
-									<li class="active"><a href="#">1</a></li>
-									<li><a href="#">2</a></li>
-									<li><a href="#">3</a></li>
-									<li><a href="#">4</a></li>
-									<li><a href="#">Next</a></li>
+									<li class="pagebtn active"><a href="groupshare.do?groupId=${group.groupId}&pageNum=0">1</a></li>
+									<li class="pagebtn"><a href="groupshare.do?groupId=${group.groupId}&pageNum=1">2</a></li>
+									<li class="pagebtn"><a href="groupshare.do?groupId=${group.groupId}&pageNum=2">3</a></li>
+									<li class="pagebtn"><a href="groupshare.do?groupId=${group.groupId}&pageNum=3">4</a></li>
+									<li class="pagebtn"><a href="#">Next</a></li>
 								</ul>
 							</div>
 						</div>
@@ -414,8 +359,8 @@
 				<div class="container">
 					<div class="row-fluid">
 						<div class="span9">
-							<h3>Want to get started?</h3>
-							<h4>Nullam iaculis dictum ullamcorper. In vitae pellentesque massa. Vivamus viverra libero dapibus, sodales lectus a, consectetur ante.</h4>
+							<h3>그룹원을 더 추가하시겠어요?</h3>
+							<h4>그룹원은 그룹장만이 추가할 수 있습니다.</h4>
 						</div>
 						<div class="span3">
 							<a class="btn btn-large" href="addMemberForm.do?groupId=${group.groupId}">그룹원 추가하기</a>
@@ -576,5 +521,12 @@
 		<script src="js/placeholder.js"></script>
 		<script src="js/jquery.colorbox-min.js"></script>
         <script src="js/main.js"></script>
+        <script type="text/javascript">
+         $(".pagebtn").click(function(){
+        	 alert("!");
+        	 $(".pagebtn").attr("class","pagebtn");
+        	 $("this").addClass(active);
+         });
+        </script>
     </body>
 </html>

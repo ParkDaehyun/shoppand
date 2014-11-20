@@ -4,6 +4,7 @@ package com.pdh.shoppand_17.service;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,13 +13,16 @@ import javax.xml.parsers.ParserConfigurationException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import com.pdh.shoppand_17.model.entity.Groups;
 import com.pdh.shoppand_17.model.entity.Shares;
 import com.pdh.shoppand_17.model.repository.ShareRepository;
 
@@ -34,7 +38,7 @@ public class ShareService {
 	
 	public JSONArray naverOpenAPI(String key){
 		System.out.println("- \""+key+"\"으로 검색한 결과입니다. -");
-		String apiKey = "6e055330faf89b926a29965edafacfef";
+		String apiKey = "5e263766c1cf05d4d1c946c47903d74b";
 		String uri = null;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		JSONArray arr = null;
@@ -110,16 +114,20 @@ public class ShareService {
 	public Shares saveShare(Shares share) {
 		return shareRepository.save(share);
 	}
+	
+	public List<Shares> getPageShare(Groups group, int pageNum){
+		return shareRepository.findByGroup(group, new PageRequest(pageNum, 8, Direction.DESC, "writingDate"));
+	}
 
-	public java.util.List<Shares> getMemberGroupShare(String email) {
+	public List<Shares> getMemberGroupShare(String email) {
 		return shareRepository.getMemberGroupShare(email);
 	}
 	
-	public java.util.List<Shares> getMemberShare(String email) {
+	public List<Shares> getMemberShare(String email) {
 		return shareRepository.findByWriter(email);
 	}
 
-	public java.util.List<Shares> getMemberAuthShare(String email) {
+	public List<Shares> getMemberAuthShare(String email) {
 		return shareRepository.findByWriterAndAccessAuth(email, 1);
 	}
 }

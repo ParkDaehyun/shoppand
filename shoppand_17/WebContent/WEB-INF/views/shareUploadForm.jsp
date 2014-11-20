@@ -70,7 +70,7 @@
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
 									<c:forEach items="${sessionScope.userInfo.memberGroups}" var="group">
-									<li><a href="groupshare.do?groupId=${group.groupId}">${group.groupName}</a></li>
+									<li><a href="groupshare.do?groupId=${group.groupId}&pageNum=0">${group.groupName}</a></li>
 									</c:forEach>
 								</ul>
 							</li>
@@ -86,7 +86,7 @@
 			<form:form commandName="share" id="shareForm" action="shareUp.do" method="post">
 			<div class="text no-animate" style="height:80%; width:30%; margin-left:-45%; position:absolute;">
 			<!-- 	<h1>Share Upload</h1><br> -->
-	        <form:hidden path="writer" value="${userInfo.name}"/>
+	        <form:hidden path="writer" value="${userInfo.email}"/>
 	        <% String toDate = new java.text.SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new java.util.Date()); %>
 	        <form:hidden path="writingDate" value="<%=toDate%>"/>
 	        <form:hidden path="replyCount" value="0"/>
@@ -107,10 +107,10 @@
         	<div id="shareImgForm" class="text no-animate" style="height:80%; width:60%;  margin-left:-12%; position:absolute; padding-left:10px; padding-right:10px;">
         			<!-- 
         		<canvas id = "frameCan" width="200px" height = "200px"></canvas> -->
-        		<form id="imgUp" enctype="multipart/form-data">
+        		<form id="imgUp" enctype="multipart/form-data" style="height:100%;">
         		<div id="shareImgbox"></div>
-	            <div id="shareImg" style="margin-left:20%; width:60%; height:80%; " >
-	            	<img id="blah"  alt="Please upload your image" style="width:100%; height:90%;"/>
+	            <div id="shareImg" style="margin-left:20%; width:60%; height:90%; " >
+	            	<img id="blah"  alt="Please upload your image" style="width:100%; height:100%;"/>
 	            </div>
 	            <input type="button" value="Search files" class="btn"/>
 	            <input type="file" name="profileImg" id="imgInp" style="font-size:30px; position:absolute; margin-left:-110px; width:50px; opacity:0;">
@@ -202,7 +202,7 @@
 		console.log(ypos);
 		var marl = 100*xpos/$("#shareImgForm").width() + 19;
 		xrate = 100*xpos/$("#blah").width();
-		yrate = 100*ypos/$("#blah").height()+8;
+		yrate = 100*ypos/$("#blah").height();
 		console.log(xrate);
 		console.log(yrate);
 		var ndiv = $(document.createElement('div'));

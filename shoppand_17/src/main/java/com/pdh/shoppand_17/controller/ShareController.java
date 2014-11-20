@@ -78,7 +78,7 @@ public class ShareController {
 		}
 		shareService.saveShare(nshare);
 		groupService.updateGroup(groupService.getGroup(Long.parseLong(group)));
-		return "redirect:/groupshare.do?groupId="+group;
+		return "redirect:/groupshare.do?groupId="+group+"&pageNum=0";
 	}
 	
 	@ResponseBody
@@ -109,5 +109,10 @@ public class ShareController {
 		}
 		return new ModelAndView("shareContent","share", sh);
 	}
+	/*
+	@RequestMapping(value="sharePageMove.do")
+	public String pageMove(int pageNum){
+		
+	}*/
 	
 }

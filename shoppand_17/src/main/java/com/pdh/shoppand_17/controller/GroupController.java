@@ -77,7 +77,7 @@ public class GroupController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "redirect:/groupshare.do?groupId=" + group.getGroupId();
+		return "redirect:/groupshare.do?groupId=" + group.getGroupId() + "&pageNum=0";
 	}
 	
 	@RequestMapping(value = "/addMemberForm.do")
@@ -137,12 +137,12 @@ public class GroupController {
 	}
 	
 	@RequestMapping(value = "/groupshare.do")
-	public ModelAndView groupShare(@ModelAttribute("userInfo")Members member, String groupId){
+	public ModelAndView groupShare(@ModelAttribute("userInfo")Members member, String groupId, int pageNum){
 		System.out.println(Long.parseLong(groupId));
 		ModelAndView mv = new ModelAndView();
 		//mv.addObject("groups", groupService.getAllGroups());
-		mv.addObject("recentnum", groupService.getGroup(Long.parseLong(groupId)).getShares().size());
-		//mv.addObject("shares", groupService.getGroup(Long.parseLong(groupId)).getShares());
+		mv.addObject("size", groupService.getGroup(Long.parseLong(groupId)).getShares().size());
+		mv.addObject("shares", shareService.getPageShare(groupService.getGroup(Long.parseLong(groupId)), pageNum));
 		mv.addObject("group", groupService.getGroup(Long.parseLong(groupId)));
 		mv.addObject("recentComm", replyService.getRecentComm(Long.parseLong(groupId)));
 				//getRecentComm(groupId));
