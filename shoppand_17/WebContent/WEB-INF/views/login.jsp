@@ -54,7 +54,7 @@
 									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
 											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
-												<li><a href="groupshare.do?groupId=${groups.groupId}">${groups.groupName}</a></li>
+												<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
 											</c:forEach>
 										</ul>
 									</li>
@@ -75,13 +75,13 @@
 						<input type="text" class="input-block-level" placeholder="Email" name="email">
 						<input type="password" class="input-block-level" placeholder="Password" name="password">
 						<div class="margin-top-20 clearfix">
-							<div class="checkbox pull-left">
+							<!-- <div class="checkbox pull-left">
 								<label>
 									<input type="checkbox">
 									Remember me
 								</label>
-							</div>	
-							<a href="register.do" class="pull-right">Forgot password?</a>
+							</div>	 -->
+							<a href="register.do" class="pull-right">회원 가입</a>
 						</div>
 					</div>	
 					<button class="btn btn-large btn-block" type="submit">Login</button>

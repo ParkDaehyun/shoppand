@@ -58,10 +58,8 @@ public class GroupController {
 		Gson gson = new Gson();
 		HashMap<String,String>hm = new HashMap<String, String>();
 		if(groupService.groupCheck(gname)){
-			hm.put("msg", "Duplicated");
 			hm.put("code", "1");
 		}else{
-			hm.put("msg", "not Duplicated");
 			hm.put("code", "2");
 		}
 		return gson.toJson(hm);
@@ -77,7 +75,7 @@ public class GroupController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "redirect:/groupshare.do?groupId=" + group.getGroupId() + "&pageNum=0";
+		return "redirect:/categoryshare.do?groupId=" + group.getGroupId() + "&item=all&pageNum=0";
 	}
 	
 	@RequestMapping(value = "/addMemberForm.do")
@@ -142,6 +140,7 @@ public class GroupController {
 		ModelAndView mv = new ModelAndView();
 		//mv.addObject("groups", groupService.getAllGroups());
 		mv.addObject("size", groupService.getGroup(Long.parseLong(groupId)).getShares().size());
+		mv.addObject("pageNum", pageNum);
 		mv.addObject("shares", shareService.getPageShare(groupService.getGroup(Long.parseLong(groupId)), pageNum));
 		mv.addObject("group", groupService.getGroup(Long.parseLong(groupId)));
 		mv.addObject("recentComm", replyService.getRecentComm(Long.parseLong(groupId)));

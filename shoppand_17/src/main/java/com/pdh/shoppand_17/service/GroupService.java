@@ -2,11 +2,13 @@ package com.pdh.shoppand_17.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pdh.shoppand_17.model.entity.Groups;
 import com.pdh.shoppand_17.model.repository.GroupRepository;
 
 @Service
+@Transactional
 public class GroupService {
 
 		
@@ -28,10 +30,8 @@ public class GroupService {
 
 		public boolean groupCheck(String gname) {
 			if(groupRepository.findByGroupName(gname) instanceof Groups){
-				System.out.println("!!");
 				return true;
 			}else{
-				System.out.println("??");
 				return false;
 			}
 		}

@@ -55,7 +55,7 @@
 									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
 											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
-												<li><a href="groupshare.do?groupId=${groups.groupId}">${groups.groupName}</a></li>
+												<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
 											</c:forEach>
 										</ul>
 									</li>

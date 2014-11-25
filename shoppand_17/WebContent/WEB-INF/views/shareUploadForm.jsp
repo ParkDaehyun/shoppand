@@ -70,7 +70,7 @@
 							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My groups <b class="caret"></b></a>
 								<ul class="dropdown-menu" role="menu">
 									<c:forEach items="${sessionScope.userInfo.memberGroups}" var="group">
-									<li><a href="groupshare.do?groupId=${group.groupId}&pageNum=0">${group.groupName}</a></li>
+									<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${group.groupName}</a></li>
 									</c:forEach>
 								</ul>
 							</li>
@@ -99,6 +99,12 @@
 	    		<form:option value="1" label="모두에게 공개"></form:option>
 	    		<form:option value="0" label="그룹에만 공개"></form:option>
 	    	</form:select>
+	    	<form:select path="category">
+	    		<form:option value="fashion" label="패션, 뷰티"></form:option>
+	    		<form:option value="living" label="가구, 생활"></form:option>
+	    		<form:option value="elect" label="컴퓨터, 가전"></form:option>
+	    		<form:option value="hobby" label="취미, 자동차"></form:option>
+	    	</form:select>
 	    	<button type="button" id="shareSM" class="btn btn-large btn-block" >
 	            Post
 	         </button>
@@ -108,9 +114,10 @@
         			<!-- 
         		<canvas id = "frameCan" width="200px" height = "200px"></canvas> -->
         		<form id="imgUp" enctype="multipart/form-data" style="height:100%;">
-        		<div id="shareImgbox"></div>
-	            <div id="shareImg" style="margin-left:20%; width:60%; height:90%; " >
-	            	<img id="blah"  alt="Please upload your image" style="width:100%; height:100%;"/>
+        		
+	            <div id="shareImg" style="margin-left:20%; width:60%; height:90%; "  >
+	            	<div id="shareImgbox"></div>
+	            	<img id="blah"  alt="Please upload your image" onload="img_Resize(this, 600, 600)"/>
 	            </div>
 	            <input type="button" value="Search files" class="btn"/>
 	            <input type="file" name="profileImg" id="imgInp" style="font-size:30px; position:absolute; margin-left:-110px; width:50px; opacity:0;">
@@ -155,6 +162,7 @@
 	var xrate;
 	var yrate;
 	var boxnum = 1;
+	var boxinfo = 0;
 	
 	$(document).ready(function(){
 	    function readURL(input) {
@@ -173,7 +181,7 @@
 
 		//file 양식으로 이미지를 선택(값이 변경) 되었을때 처리하는 코드
 		$("#imgInp").change(function(e){
-			alert(this.value); //선택한 이미지 경로 표시
+			//alert(this.value); //선택한 이미지 경로 표시
 			readURL(this);
 			
 		});
@@ -196,11 +204,16 @@
 	});
 	
 	$("#shareImg").click(function(e){
-		xpos = parseInt(e.clientX) - $("#shareImg").offset().left;
-		ypos = parseInt(e.clientY) - $("#shareImg").offset().top;
+		if(boxinfo == 1){
+			$("#shareImgbox").empty();
+			boxinfo = 0;
+		}else{
+			boxinfo = 1;
+		xpos = parseInt(e.clientX) - $("#blah").offset().left;
+		ypos = parseInt(e.clientY) - $("#blah").offset().top;
 		console.log(xpos);
 		console.log(ypos);
-		var marl = 100*xpos/$("#shareImgForm").width() + 19;
+		var marl = parseInt(e.clientX) - $("#shareImg").offset().left;
 		xrate = 100*xpos/$("#blah").width();
 		yrate = 100*ypos/$("#blah").height();
 		console.log(xrate);
@@ -210,12 +223,12 @@
 		//ndiv.attr({style : "width : " + Math.floor(loc[2]-loc[0])+"px;" + " height : " + Math.floor(loc[3]-loc[1]) +"px;"});
 		$("#shareImgbox").append(ndiv);
 		$("#shareImgbox").css("position", "absolute");
-		$("#shareImgbox").css("margin-left", marl + "%");
+		$("#shareImgbox").css("margin-left", marl + "px");
 		$("#shareImgbox").css("top", 20 + ypos + "px");
 		$("#resultSearch").empty();
 		$("#resultSearch").append("<input id='itemKeyword' type='text' name='keyword' placeholder='Search Article'>");
 		$("#tagbox").append("<a href='#myModal' role='button' class='btn btn-large' onclick='$(\"#shareImgbox\").empty()' data-toggle='modal'>Add tag</a>");
-		
+		}
 		/* $("#sbox" + boxnum).css("margin-top", loc[1]);
 		$("#sbox" + boxnum).css("margin-left", loc[0]);
 		$("#sbox" + boxnum).attr("ondrop", "drop(this, event);");
@@ -240,13 +253,14 @@
 					alert(e);
 				}
 			});
-			var marl = 100*xpos/$("#shareImgForm").width() + 19;
+			var marl = $("#blah").offset().left- $("#shareImgForm").offset().left + xpos - 20;
+			//var marl = 100*xpos/$("#shareImgForm").width() + 19;
 			var ndiv = $(document.createElement('div'));
 			ndiv.attr({id : "tagbtn"+boxnum });
 			$("#shareImgForm").append(ndiv);
 			$("#tagbtn"+boxnum).css("position", "absolute");
-			$("#tagbtn"+boxnum).css("margin-left", marl + "%");
-			$("#tagbtn"+boxnum).css("top", 20 + ypos + "px");
+			$("#tagbtn"+boxnum).css("margin-left", marl + "px");
+			$("#tagbtn"+boxnum).css("top", ypos + "px");
 			$("#tagbtn"+boxnum).append("<img id='"+boxnum+"' src='images/frame.png' style='width:20px' onmouseover='onmouse(this)' onmouseout='outmouse(this)' onclick='clickimg(this)'>");
 			$("#taggedbox_"+boxnum).append("<div id='boxdiv"+boxnum+"' style='font-size:20px; overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'><img src="+ imgurl+"><br>"+ title +"<br>"+price+"원</div>");
 			boxnum++;
@@ -320,6 +334,47 @@
 			}
 		});
 	});
+	
+	function img_Resize(targetImg, wsize, hsize) //그림의 이미지 사이즈 구하기. 
+    { 
+	    var imgw; 
+	    var imgh; 
+	    var timgw; 
+	    var timgh;
+	    imgw = targetImg.width; 
+	    imgh = targetImg.height;
+	    if (imgw <= wsize && imgh <= hsize ) { // 사이즈가 공간 보다 크면 같은 비율로 줄여서 보여 준다. 
+	     divImg = ""; 
+	    } else if (imgw > wsize && imgh <= hsize) { 
+	     timgw = wsize; 
+	     timgh = (wsize / imgw) * imgh; 
+	     divImg = ""; 
+	     targetImg.width=timgw;
+	      targetImg.height=timgh;
+	    } else if (imgw <= wsize && imgh > hsize) { 
+	     timgw = (hsize / imgh) * imgw; 
+	     timgh = hsize; 
+	     divImg = ""; 
+	     targetImg.width=timgw;
+	      targetImg.height=timgh;
+	    } else if (imgw > wsize && imgh > hsize) { 
+	     var comp; 
+	     if ((wsize/imgw) >= (hsize/imgh)) { 
+	      comp = 'W'; 
+	     } else { 
+	      comp = 'H'; 
+	     } 
+	     if (comp == 'W') { 
+	      timgw = (hsize / imgh) * imgw;
+	      timgh = hsize;
+	     } else { 
+	      timgw = wsize; 
+	      timgh = (wsize / imgw) * imgh; 
+	     } 
+	      targetImg.width=timgw;
+	      targetImg.height=timgh;
+	    } 
+   }
 	
 	/* 
 		var form = $('#imgUp');

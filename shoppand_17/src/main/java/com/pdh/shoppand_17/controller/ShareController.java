@@ -12,6 +12,7 @@ import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,10 +21,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
- 
+
+import com.pdh.shoppand_17.model.entity.Members;
 import com.pdh.shoppand_17.model.entity.Shares;
 import com.pdh.shoppand_17.service.GroupService;
 import com.pdh.shoppand_17.service.ItemService;
+import com.pdh.shoppand_17.service.ReplyService;
 import com.pdh.shoppand_17.service.ShareService;
 
 @Controller
@@ -38,6 +41,9 @@ public class ShareController {
 	
 	@Autowired
 	private ItemService itemService;
+	
+	@Autowired
+	private ReplyService replyService;
 	
 	@RequestMapping(value = "/shareUploadForm.do")
 	public ModelAndView imgUploadForm(Long groupId){
@@ -78,7 +84,7 @@ public class ShareController {
 		}
 		shareService.saveShare(nshare);
 		groupService.updateGroup(groupService.getGroup(Long.parseLong(group)));
-		return "redirect:/groupshare.do?groupId="+group+"&pageNum=0";
+		return "redirect:/categoryshare.do?groupId="+group+"&item=all&pageNum=0";
 	}
 	
 	@ResponseBody
@@ -109,10 +115,24 @@ public class ShareController {
 		}
 		return new ModelAndView("shareContent","share", sh);
 	}
-	/*
-	@RequestMapping(value="sharePageMove.do")
-	public String pageMove(int pageNum){
-		
-	}*/
 	
+	@RequestMapping(value="categoryshare.do")
+	public ModelAndView categoryshare(@ModelAttribute("userInfo")Members member, String groupId, String item, int pageNum){
+		ModelAndView mv = new ModelAndView();
+		List<Shares> categoryShare;
+		if(item.equals("all")){
+			categoryShare = shareService.getPageShare(groupService.getGroup(Long.parseLong(groupId)), pageNum);
+			mv.addObject("size", groupService.getGroup(Long.parseLong(groupId)).getShares().size());
+		}else{
+			categoryShare = shareService.getGroupCategoryShare(groupService.getGroup(Long.parseLong(groupId)), item, pageNum);
+			mv.addObject("size", shareService.getGroupCategoryShare(groupService.getGroup(Long.parseLong(groupId)), item).size());
+		}		
+		mv.addObject("pageNum", pageNum);
+		mv.addObject("shares", categoryShare);
+		mv.addObject("category", item);
+		mv.addObject("group", groupService.getGroup(Long.parseLong(groupId)));
+		mv.addObject("recentComm", replyService.getRecentComm(Long.parseLong(groupId)));
+		mv.setViewName("groupShare");
+		return mv;
+	}
 }

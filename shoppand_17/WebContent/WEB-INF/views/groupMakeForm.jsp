@@ -56,7 +56,7 @@
 									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
 											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
-												<li><a href="groupshare.do?groupId=${groups.groupId}">${groups.groupName}</a></li>
+												<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
 											</c:forEach>
 										</ul>
 									</li>
@@ -71,16 +71,22 @@
 		
 		<div class="parallax no-animate large-view form-page" style="background-image: url(images/bg1.jpg);">	
 			<div class="text no-animate">
-				<h1>Register</h1><br>
+				<h2> 새 그룹의 이름을 지어주세요</h2><br>
 			<form:form commandName="newgroup" action="groupadd.do" method="post" id="groupadd">
 	        <form:input path="groupName" class="input-block-level" id="groupName" placeholder="Group Name"/>
 	        <form:hidden path="founder" value="${userInfo.email}"/>
 	        <form:hidden path="groupDate" value="<%=toDate%>"/>
         	</form:form>
-	         <button type="button" id="duplcheck" class="btn btn-large btn-block">
+	         <button type="button" id="duplcheck" class="btn btn-large">
 	          		  중복확인
 	         </button>
+	         <br><br>
+	         <div id="alertdiv">
+	         
+	         </div>
+	          
         </div>
+       
         </div>
 				
 
@@ -134,13 +140,12 @@
 				success : function(data){
 					var jsonObj = $.parseJSON(data);
 					if(jsonObj.code == "2"){
-						var ans = confirm(jsonObj.msg + "\ncreate?");
-						if(ans == true){
-							$("#groupadd").submit();
-						}else{
-							$("#groupName").val("");
-						}
+						$("#alertdiv").empty();
+						$("#alertdiv").append("<div class='alert alert-success alert-block fade in'><button class='close' data-dismiss='alert' type='button'>×</button><h4 class='alert-heading'>그룹명이 사용가능합니다. 사용하시겠습니까?</h4><p>Change this and that and try again.</p><p><a class='btn' href='javascript:groupOk();'>이대로 그룹 만들기</a><a class='btn' href='javascript:groupRe();'>그룹이름 재설정</a></p></div>");
+						
 					}else{
+						$("#alertdiv").empty();
+						$("#alertdiv").append("<div class='alert alert-block alert-error fade in'><button class='close' data-dismiss='alert' type='button'>×</button><h4 class='alert-heading'>그룹명이 중복되었습니다. 재설정해주세요.</h4></div>");
 						$("#groupName").val("");
 					}
 					
@@ -150,6 +155,15 @@
 				}
 			});
 		});
+		
+		function groupOk(){
+			$("#groupadd").submit();
+		}
+		
+		function groupRe(){
+			$("#groupName").val("");
+			$("#alertdiv").empty();
+		}
 		
 	</script>
 </body>

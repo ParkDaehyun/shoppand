@@ -2,11 +2,13 @@ package com.pdh.shoppand_17.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pdh.shoppand_17.model.entity.Items;
 import com.pdh.shoppand_17.model.repository.ItemRepository;
 
 @Service
+@Transactional
 public class ItemService {
 
 	@Autowired

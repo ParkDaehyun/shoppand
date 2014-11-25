@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pdh.shoppand_17.model.entity.Groups;
 import com.pdh.shoppand_17.model.entity.Members;
@@ -12,6 +13,7 @@ import com.pdh.shoppand_17.model.repository.MemberRepository;
 
 
 @Service
+@Transactional
 public class MemberService {
 	
 	@Autowired

@@ -43,6 +43,9 @@ public class Shares {
 	@Column
 	private int accessAuth;
 	
+	@Column
+	private String category;
+	
 	@ManyToOne
 	@JoinColumn(name = "groupId", updatable = false, insertable = false)
 	private Groups group;
@@ -109,13 +112,21 @@ public class Shares {
 	public void setReplyCount(int replyCount) {
 		this.replyCount = replyCount;
 	}
-	
-	public int getaccessAuth() {
+		
+	public int getAccessAuth() {
 		return accessAuth;
 	}
 
-	public void setaccessAuth(int accessAuth) {
+	public void setAccessAuth(int accessAuth) {
 		this.accessAuth = accessAuth;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public Groups getGroup() {

@@ -6,6 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -27,7 +30,9 @@ import com.pdh.shoppand_17.model.entity.Shares;
 import com.pdh.shoppand_17.model.repository.ShareRepository;
 
 @Service
+@Transactional
 public class ShareService {
+	
 	
 	@Autowired
 	private ShareRepository shareRepository;
@@ -129,5 +134,13 @@ public class ShareService {
 
 	public List<Shares> getMemberAuthShare(String email) {
 		return shareRepository.findByWriterAndAccessAuth(email, 1);
+	}
+
+	public List<Shares> getGroupCategoryShare(Groups group, String category) {
+		return shareRepository.findByGroupAndCategory(group, category);
+	}
+	
+	public List<Shares> getGroupCategoryShare(Groups group, String category, int pageNum) {
+		return shareRepository.findByGroupAndCategory(group, category, new PageRequest(pageNum, 8, Direction.DESC, "writingDate"));
 	}
 }

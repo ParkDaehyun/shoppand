@@ -22,7 +22,7 @@
 		<![endif]-->
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
-    <body>
+    <body onload="pageChk(${size}, ${pageNum});">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -54,7 +54,7 @@
 									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
 											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
-												<li><a href="groupshare.do?groupId=${groups.groupId}&pageNum=0">${groups.groupName}</a></li>
+												<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
 											</c:forEach>
 										</ul>
 									</li>
@@ -82,7 +82,14 @@
 					<h2 class="with-border"> Shares <small class="color">/ write something</small><a class="btn pull-right" href="shareUploadForm.do?groupId=${group.groupId}">Post</a></h2>
 					<c:choose>
 					<c:when test="${empty shares}">
-							없어
+						<c:choose>
+						<c:when test="${category=='all'}">
+						그룹 내 게시물이 존재하지 않습니다. 첫 게시물을 올려주세요.
+						</c:when>
+						<c:otherwise>
+						해당 카테고리의 게시글이 존재하지 않습니다. 	<a href='javascript:history.back()'>뒤로 가기</a>
+						</c:otherwise>
+						</c:choose>
 					</c:when>
 					<c:otherwise>
 					<div class="row-fluid">
@@ -121,36 +128,13 @@
 											</div>	
 										</li>
 										</c:forEach>
-										
-										
-										<%-- <li class="span6">
-											<div class="thumbnail">
-												<div class="img-wrap">
-													<a href="#"><img src="images/shareImgs/${list.imgName}" alt=""/></a>
-												</div>
-												<h3>Cum maiestatis necessitatibus</h3>
-												<div class="info-panel clearfix">
-													<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> Sep 19, 2013</time></span>
-													<span class="pull-right"><i class="icon-user"></i> By Rick </span>
-												</div>	
-												<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
-												<a class="btn pull-right" href="#">Read more</a>
-											</div>	
-										</li> --%>
 									</div>
 									
-									<%-- </c:forEach> --%>
 								</c:forEach>
 								
 							</ul>	
-							<div class="pagination">
-								<ul>
-									<li class="disabled"><a href="#">Prev</a></li>
-									<li class="pagebtn active"><a href="groupshare.do?groupId=${group.groupId}&pageNum=0">1</a></li>
-									<li class="pagebtn"><a href="groupshare.do?groupId=${group.groupId}&pageNum=1">2</a></li>
-									<li class="pagebtn"><a href="groupshare.do?groupId=${group.groupId}&pageNum=2">3</a></li>
-									<li class="pagebtn"><a href="groupshare.do?groupId=${group.groupId}&pageNum=3">4</a></li>
-									<li class="pagebtn"><a href="#">Next</a></li>
+							<div class="pagination" >
+								<ul id="pageSpace">
 								</ul>
 							</div>
 						</div>
@@ -164,11 +148,11 @@
 							<article>
 								<h4 class="with-border">Categories</h4>
 								<ul class="unstyled link-list">
-									<li class=""><a href="#"><i class="icon-chevron-right"></i> Design</a></li>
-									<li class=""><a href="#"><i class="icon-chevron-right"></i> Development</a></li>
-									<li class=""><a href="#"><i class="icon-chevron-right"></i> Usability</a></li>
-									<li class=""><a href="#"><i class="icon-chevron-right"></i> Support</a></li>
-									<li class=""><a href="#"><i class="icon-chevron-right"></i> Advertisement</a></li>
+									<li class=""><a href="categoryshare.do?groupId=${group.groupId}&item=all&pageNum=0"><i class="icon-chevron-right"></i> 전체보기</a></li>
+									<li class=""><a href="categoryshare.do?groupId=${group.groupId}&item=fashion&pageNum=0"><i class="icon-chevron-right"></i> 패션, 뷰티</a></li>
+									<li class=""><a href="categoryshare.do?groupId=${group.groupId}&item=living&pageNum=0"><i class="icon-chevron-right"></i> 가구, 생활</a></li>
+									<li class=""><a href="categoryshare.do?groupId=${group.groupId}&item=elect&pageNum=0"><i class="icon-chevron-right"></i> 컴퓨터, 가전</a></li>
+									<li class=""><a href="categoryshare.do?groupId=${group.groupId}&item=hobby&pageNum=0"><i class="icon-chevron-right"></i> 취미, 자동차</a></li>
 								</ul>
 							</article>	
 							<article class="section">
@@ -522,11 +506,76 @@
 		<script src="js/jquery.colorbox-min.js"></script>
         <script src="js/main.js"></script>
         <script type="text/javascript">
-         $(".pagebtn").click(function(){
-        	 alert("!");
-        	 $(".pagebtn").attr("class","pagebtn");
-        	 $("this").addClass(active);
-         });
+        function pageChk(size, pageNum){
+        	pageSize = size/8;
+        	var order = Math.floor(pageNum/4.01)*5;
+        	if(pageSize>order+5){
+        		pageSize = order+5;
+        	}
+        	if(pageNum<5){
+        		$("#pageSpace").append("<li class='disabled'><a href='#'>Prev</a></li>");
+        	}else{
+        		$("#pageSpace").append("<li class='pagebtn'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+(order-5)+"' onclick='prePage("+size+","+pageNum+","+(order-5)+")'>Prev</a></li>");
+        	}
+        	for(i=order; i<pageSize; i++){
+        		if(i==pageNum){
+        			$("#pageSpace").append("<li class='pagebtn active'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+i+"'>"+(i+1)+"</a></li>");
+        		}else{
+        			$("#pageSpace").append("<li class='pagebtn'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+i+"'>"+(i+1)+"</a></li>");
+        		}
+        	}
+        	if(pageSize==order+5){
+        		$("#pageSpace").append("<li class='pagebtn'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+pageSize+"' onclick='nextPage("+size+","+pageNum+","+(order+5)+");'>Next</a></li>");
+        	}else{
+        		$("#pageSpace").append("<li class='disabled'><a href='#'>Next</a></li>");
+        	}
+		};
+		
+		function prePage(size, pageNum, order){
+			pageSize = size/8;
+			if(pageSize>order+5){
+				pageSize = order+5;
+			}
+			$("#pageSpace").empty();
+			if(order<=0){
+        		$("#pageSpace").append("<li class='disabled'><a href='#'>Prev</a></li>");
+        	}else{
+				$("#pageSpace").append("<li class='pagebtn'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+(order-5)+"' onclick='prePage("+size+","+pageNum+","+(order-5)+")'>Prev</a></li>");
+        	}
+			for(i=order; i<pageSize; i++){
+        		if(i==pageNum){
+        			$("#pageSpace").append("<li class='pagebtn active'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+i+"'>"+(i+1)+"</a></li>");
+        		}else{
+        			$("#pageSpace").append("<li class='pagebtn'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+i+"'>"+(i+1)+"</a></li>");
+        		}
+        	}
+			if(pageSize==order+5){
+        		$("#pageSpace").append("<li class='pagebtn'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+pageSize+"' onclick='nextPage("+size+","+pageNum+","+(order+5)+");'>Next</a></li>");
+        	}else{
+        		$("#pageSpace").append("<li class='disabled'><a href='#'>Next</a></li>");
+        	}
+		};
+		
+		function nextPage(size, pageNum, order){
+			pageSize = size/8;
+			if(pageSize>order+5){
+				pageSize = order+5;
+			}
+			$("#pageSpace").empty();
+			$("#pageSpace").append("<li class='pagebtn'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+(order-5)+"' onclick='prePage("+size+","+pageNum+","+(order-5)+")'>Prev</a></li>");
+			for(i=order; i<pageSize; i++){
+        		if(i==pageNum){
+        			$("#pageSpace").append("<li class='pagebtn active'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+i+"'>"+(i+1)+"</a></li>");
+        		}else{
+        			$("#pageSpace").append("<li class='pagebtn'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+i+"'>"+(i+1)+"</a></li>");
+        		}
+        	}
+			if(pageSize==order+5){
+        		$("#pageSpace").append("<li class='pagebtn'><a href='categoryshare.do?groupId=${group.groupId}&item=${category}&pageNum="+pageSize+"' onclick='nextPage("+size+","+pageNum+","+(order+5)+");'>Next</a></li>");
+        	}else{
+        		$("#pageSpace").append("<li class='disabled'><a href='#'>Next</a></li>");
+        	}			
+		};
         </script>
     </body>
 </html>

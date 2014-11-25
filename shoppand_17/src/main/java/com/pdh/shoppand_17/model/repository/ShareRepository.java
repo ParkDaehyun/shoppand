@@ -2,6 +2,7 @@ package com.pdh.shoppand_17.model.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -20,4 +21,8 @@ public interface ShareRepository extends CrudRepository<Shares, Long> {
 	List<Shares> findByWriterAndAccessAuth(String writer, int accessAuth);
 
 	List<Shares> findByGroup(Groups group, Pageable pageable);
+
+	List<Shares> findByGroupAndCategory(Groups group, String category, Pageable pageable);
+	
+	List<Shares> findByGroupAndCategory(Groups group, String category);
 }
