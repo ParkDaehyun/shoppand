@@ -133,5 +133,52 @@ public class Groups {
 		return this.groupMembers.contains(findMember);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((founder == null) ? 0 : founder.hashCode());
+		result = prime * result
+				+ ((groupDate == null) ? 0 : groupDate.hashCode());
+		result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
+		result = prime * result
+				+ ((groupName == null) ? 0 : groupName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Groups other = (Groups) obj;
+		if (founder == null) {
+			if (other.founder != null)
+				return false;
+		} else if (!founder.equals(other.founder))
+			return false;
+		if (groupDate == null) {
+			if (other.groupDate != null)
+				return false;
+		} else if (!groupDate.equals(other.groupDate))
+			return false;
+		if (groupId == null) {
+			if (other.groupId != null)
+				return false;
+		} else if (!groupId.equals(other.groupId))
+			return false;
+		if (groupName == null) {
+			if (other.groupName != null)
+				return false;
+		} else if (!groupName.equals(other.groupName))
+			return false;
+		return true;
+	}
+	
+	
+
 	
 }

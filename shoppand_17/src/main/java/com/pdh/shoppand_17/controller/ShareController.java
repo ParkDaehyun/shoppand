@@ -11,6 +11,7 @@ import net.sf.json.JSONArray;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import com.pdh.shoppand_17.model.entity.Members;
 import com.pdh.shoppand_17.model.entity.Shares;
 import com.pdh.shoppand_17.service.GroupService;
 import com.pdh.shoppand_17.service.ItemService;
+import com.pdh.shoppand_17.service.MemberService;
 import com.pdh.shoppand_17.service.ReplyService;
 import com.pdh.shoppand_17.service.ShareService;
 
@@ -44,6 +46,9 @@ public class ShareController {
 	
 	@Autowired
 	private ReplyService replyService;
+	
+	@Autowired
+	private MemberService memberService;
 	
 	@RequestMapping(value = "/shareUploadForm.do")
 	public ModelAndView imgUploadForm(Long groupId){
@@ -134,5 +139,39 @@ public class ShareController {
 		mv.addObject("recentComm", replyService.getRecentComm(Long.parseLong(groupId)));
 		mv.setViewName("groupShare");
 		return mv;
+	}
+	
+	@RequestMapping(value="likeUp.do")
+	@ResponseBody
+	public String likeUp(@ModelAttribute("userInfo")Members member, String shareId, Model model){
+		Shares share = null;
+		try {
+			share = shareService.getShare(Long.parseLong(shareId));
+			System.out.println(share.getTitle());
+			System.out.println(share.getLikes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(!share.getLikeMembers().isEmpty()){
+		System.out.println(share.getLikeMembers().iterator().next().equals(member));
+		}
+		System.out.println(member.getLikeShares());
+		System.out.println(share.getLikeMembers().contains(member));
+		if(!share.getLikeMembers().contains(member)){
+			share.addLikeUser(member);
+			model.addAttribute("userInfo", memberService.updateMember(member));
+			//System.out.println(share.getLikeMembers());
+			share = shareService.saveShare(share);
+			System.out.println(share.getTitle());
+			System.out.println(share.getLikes());
+		}
+		return String.valueOf(share.getLikes());
+	}
+	
+	
+	@RequestMapping(value="recommendShareList.do")
+	public ModelAndView recommendShareList(@ModelAttribute("userInfo")Members member){
+		
+		return new ModelAndView("test","shares", shareService.recommendShareList(member));
 	}
 }

@@ -1,7 +1,9 @@
 package com.pdh.shoppand_17.model.entity;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,6 +57,15 @@ public class Members {
 	@JoinColumn(name = "email", nullable = false)
 	private List<Replies> memberReplies = new ArrayList<Replies>();
 	
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name = "LIKE_SHARES",
+			joinColumns=@JoinColumn(name="email"),
+			inverseJoinColumns=@JoinColumn(name="shareId"))
+	private Set<Shares> likeShares = new LinkedHashSet<Shares>();
+	
+	/*
+	@ManyToMany(mappedBy = "")
+	*/
 	public Members() {
 	}
 
@@ -131,15 +142,16 @@ public class Members {
 
 	
 
-	public String getprofileImg() {
+	public String getProfileImg() {
 		return profileImg;
 	}
 
 
 
-	public void setprofileImg(String profileImg) {
+	public void setProfileImg(String profileImg) {
 		this.profileImg = profileImg;
 	}
+	
 	
 	public List<Groups> getMemberGroups() {
 		return memberGroups;
@@ -175,6 +187,16 @@ public class Members {
 		this.memberReplies = memberReplies;
 	}
 
+	
+	
+	public Set<Shares> getLikeShares() {
+		return likeShares;
+	}
+
+	public void setLikeShares(Set<Shares> likeShares) {
+		this.likeShares = likeShares;
+	}
+
 	public void addReply(Replies reply){
 		this.memberReplies.add(reply);
 		reply.setMember(this);
@@ -186,6 +208,71 @@ public class Members {
 				+ name + ", gender=" + gender + ", location=" + location
 				+ ", profileImg=" + profileImg + "]";
 	}
+
+	public void addLikeShare(Shares share) {
+		this.likeShares.add(share);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+		result = prime * result
+				+ ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((password == null) ? 0 : password.hashCode());
+		result = prime * result
+				+ ((profileImg == null) ? 0 : profileImg.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Members other = (Members) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (gender == null) {
+			if (other.gender != null)
+				return false;
+		} else if (!gender.equals(other.gender))
+			return false;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (profileImg == null) {
+			if (other.profileImg != null)
+				return false;
+		} else if (!profileImg.equals(other.profileImg))
+			return false;
+		return true;
+	}
+
+		
+	
 	
 	
 	/*public List<Groups> getGroup() {

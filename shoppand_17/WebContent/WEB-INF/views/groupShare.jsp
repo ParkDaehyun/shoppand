@@ -103,6 +103,8 @@
 										<h3>${shares[0].title}</h3>
 										<div class="info-panel clearfix">
 											<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> ${shares[0].writingDate}</time></span>
+											<span class="pull-left"><i class="icon-tags"></i> 추천 ${shares[0].likes}개</span>
+											<span class="pull-left"><i class="icon-comments"></i> 댓글 ${shares[0].replyCount}개</span>
 											<span class="pull-right"><i class="icon-user"></i> ${shares[0].writer}</span>
 										</div>	
 										<p>${shares[0].info}</p>
@@ -121,6 +123,8 @@
 												<h3>${inlist.title}</h3>
 												<div class="info-panel clearfix">
 													<span class="pull-left"><time datetime=""><i class="icon-calendar "></i> ${inlist.writingDate}</time></span>
+													<span class="pull-left"><i class="icon-tags"></i> 추천 ${inlist.likes}개</span>
+													<span class="pull-left"><i class="icon-comments"></i> 댓글 ${inlist.replyCount}개</span>
 													<span class="pull-right"><i class="icon-user"></i>${inlist.writer}</span>
 												</div>	
 												<p>${inlist.info}</p>

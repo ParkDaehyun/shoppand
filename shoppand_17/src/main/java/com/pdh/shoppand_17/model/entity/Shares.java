@@ -1,14 +1,18 @@
 package com.pdh.shoppand_17.model.entity;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -46,16 +50,21 @@ public class Shares {
 	@Column
 	private String category;
 	
+	@Column
+	private int likes = 0;
+	
 	@ManyToOne
 	@JoinColumn(name = "groupId", updatable = false, insertable = false)
 	private Groups group;
 	
-
 	@OneToMany(mappedBy = "share")
 	private List<Items> items = new ArrayList<Items>();
 
 	@OneToMany(mappedBy = "share")
 	private List<Replies> replies = new ArrayList<Replies>();
+	
+	@ManyToMany(mappedBy = "likeShares")
+	private Set<Members> likeMembers = new LinkedHashSet<Members>();
 	
 	public Long getShareId() {
 		return shareId;
@@ -154,6 +163,14 @@ public class Shares {
 		this.replies = replies;
 	}
 
+	public Set<Members> getLikeMembers() {
+		return likeMembers;
+	}
+
+	public void setLikeMembers(Set<Members> likeMembers) {
+		this.likeMembers = likeMembers;
+	}
+
 	public void addItems(Items item) {
 		this.items.add(item);
 		item.setShare(this);
@@ -168,6 +185,21 @@ public class Shares {
 		if(flag == 1) {return true;}
 		else{return false;}
 	}
+	
+	public void addLikeUser(Members member) {
+		System.out.println(member);
+		this.likeMembers.add(member);
+		member.addLikeShare(this);
+		this.likes = likeMembers.size();
+	}
+
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
 
 	@Override
 	public String toString() {
@@ -175,6 +207,82 @@ public class Shares {
 				+ title + ", writingDate=" + writingDate + ", imgName="
 				+ imgName + ", info=" + info + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + accessAuth;
+		result = prime * result
+				+ ((category == null) ? 0 : category.hashCode());
+		result = prime * result + ((imgName == null) ? 0 : imgName.hashCode());
+		result = prime * result + ((info == null) ? 0 : info.hashCode());
+		result = prime * result + likes;
+		result = prime * result + replyCount;
+		result = prime * result + ((shareId == null) ? 0 : shareId.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((writer == null) ? 0 : writer.hashCode());
+		result = prime * result
+				+ ((writingDate == null) ? 0 : writingDate.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Shares other = (Shares) obj;
+		if (accessAuth != other.accessAuth)
+			return false;
+		if (category == null) {
+			if (other.category != null)
+				return false;
+		} else if (!category.equals(other.category))
+			return false;
+		if (imgName == null) {
+			if (other.imgName != null)
+				return false;
+		} else if (!imgName.equals(other.imgName))
+			return false;
+		if (info == null) {
+			if (other.info != null)
+				return false;
+		} else if (!info.equals(other.info))
+			return false;
+		if (likes != other.likes)
+			return false;
+		if (replyCount != other.replyCount)
+			return false;
+		if (shareId == null) {
+			if (other.shareId != null)
+				return false;
+		} else if (!shareId.equals(other.shareId))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		if (writer == null) {
+			if (other.writer != null)
+				return false;
+		} else if (!writer.equals(other.writer))
+			return false;
+		if (writingDate == null) {
+			if (other.writingDate != null)
+				return false;
+		} else if (!writingDate.equals(other.writingDate))
+			return false;
+		return true;
+	}
+
+
+	
+	
 	
 	
 }

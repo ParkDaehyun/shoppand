@@ -118,6 +118,68 @@ public class Items {
 	public void setShare(Shares share) {
 		this.share = share;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((imgUrl == null) ? 0 : imgUrl.hashCode());
+		result = prime * result + ((itemId == null) ? 0 : itemId.hashCode());
+		result = prime * result
+				+ ((itemName == null) ? 0 : itemName.hashCode());
+		result = prime * result + ((link == null) ? 0 : link.hashCode());
+		result = prime * result + price;
+		result = prime * result + ((xpos == null) ? 0 : xpos.hashCode());
+		result = prime * result + ((ypos == null) ? 0 : ypos.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Items other = (Items) obj;
+		if (imgUrl == null) {
+			if (other.imgUrl != null)
+				return false;
+		} else if (!imgUrl.equals(other.imgUrl))
+			return false;
+		if (itemId == null) {
+			if (other.itemId != null)
+				return false;
+		} else if (!itemId.equals(other.itemId))
+			return false;
+		if (itemName == null) {
+			if (other.itemName != null)
+				return false;
+		} else if (!itemName.equals(other.itemName))
+			return false;
+		if (link == null) {
+			if (other.link != null)
+				return false;
+		} else if (!link.equals(other.link))
+			return false;
+		if (price != other.price)
+			return false;
+		if (xpos == null) {
+			if (other.xpos != null)
+				return false;
+		} else if (!xpos.equals(other.xpos))
+			return false;
+		if (ypos == null) {
+			if (other.ypos != null)
+				return false;
+		} else if (!ypos.equals(other.ypos))
+			return false;
+		return true;
+	}
+
+	
+	
 	
 	
 }

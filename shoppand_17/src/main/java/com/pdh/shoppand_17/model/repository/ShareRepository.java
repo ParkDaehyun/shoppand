@@ -25,4 +25,13 @@ public interface ShareRepository extends CrudRepository<Shares, Long> {
 	List<Shares> findByGroupAndCategory(Groups group, String category, Pageable pageable);
 	
 	List<Shares> findByGroupAndCategory(Groups group, String category);
+
+	List<Shares> findByLikesGreaterThan(int likes);
+	
+	@Query(value="select DISTINCT share_id from like_shares ls order by share_id asc", nativeQuery= true)
+	List<Long>  findLikedShares();
+	
+	@Query(value="select DISTINCT email from like_shares ls order by email asc", nativeQuery= true)
+	List<String>  findShareLikingMember();
+	
 }
