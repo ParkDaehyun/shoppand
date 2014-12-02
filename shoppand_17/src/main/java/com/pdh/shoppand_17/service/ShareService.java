@@ -171,7 +171,7 @@ public class ShareService {
 		}
 		
 		user = new int[likedShareIdList.size()];
-		data = new int[likingMemberEmailList.size()][likedShareIdList.size()];
+		data = new int[likingMemberEmailList.size()-1][likedShareIdList.size()];
 		//data = new int[likingMemberEmailList.size()-1][likedShareIdList.size()];
 		recommend = new int[likedShareIdList.size()];
 		//scrapsTableList = articlesDao.scrapsTableList();
