@@ -5,14 +5,12 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -137,7 +135,7 @@ public class ShareService {
 		List<String> likingMemberEmailList;
 		
 		
-		List<Shares> likedSharesList;
+		Map<Integer,HashMap<Integer,String>> likedSharesMap;
 		List<String> ul = new ArrayList<String>();
 		List<String> el = new ArrayList<String>();
 		Set<Shares> recommendShareList = new LinkedHashSet<Shares>();
@@ -169,30 +167,36 @@ public class ShareService {
 			System.out.println(likingMemberEmailList.get(i));
 			el.add(likingMemberEmailList.get(i));
 		}
-		
+		if(likingMemberEmailList.size() == 0){
+			return null;
+		}
 		user = new int[likedShareIdList.size()];
 		data = new int[likingMemberEmailList.size()-1][likedShareIdList.size()];
 		//data = new int[likingMemberEmailList.size()-1][likedShareIdList.size()];
 		recommend = new int[likedShareIdList.size()];
 		//scrapsTableList = articlesDao.scrapsTableList();
-		likedSharesList = shareRepository.findByLikesGreaterThan(0);
+		//likedSharesList = shareRepository.findByLikesGreaterThan(0);
+		likedSharesMap = likedShares(member);
+		System.out.println("lsm : " + likedSharesMap);
 		/*for (int i = 0; i < scrapsTableList.size(); i++) {
 			if (scrapsTableList.get(i).getEmail().equals(email)) {
 				userIndex = ul.indexOf(scrapsTableList.get(i).getEmail());
 				user[ul.indexOf(scrapsTableList.get(i).getArticleUrl())] = 1;
 			} */
 		
-		for (int i = 0; i < likedSharesList.size(); i++) {
-			if (likedSharesList.get(i).getLikeMembers().contains(member)) {
+		for (int i = 0; i < likedSharesMap.size(); i++) {
+			if (likedSharesMap.get(i).get(1).equals(member.getEmail())) {
+				System.out.println("me : "+ likedSharesMap.get(i).get(1));
 				userIndex = el.indexOf(member.getEmail());
-				user[ul.indexOf(String.valueOf(likedSharesList.get(i).getShareId()))] = 1;
+				user[ul.indexOf(likedSharesMap.get(i).get(2))] = 1;
 			} else {
-				otherIndex = el.indexOf(member.getEmail());
+				System.out.println("other : "+ likedSharesMap.get(i).get(1));
+				otherIndex = el.indexOf(likedSharesMap.get(i).get(1));
 				System.out.println(otherIndex);
 				if (userIndex < otherIndex) {
-					data[otherIndex-1][ul.indexOf(String.valueOf(likedSharesList.get(i).getShareId()))] = 1;
+					data[otherIndex-1][ul.indexOf(likedSharesMap.get(i).get(2))] = 1;
 				} else {
-					data[otherIndex][ul.indexOf(String.valueOf(likedSharesList.get(i).getShareId()))] = 1;
+					data[otherIndex][ul.indexOf(likedSharesMap.get(i).get(2))] = 1;
 				}
 			}
 		}
@@ -208,6 +212,25 @@ public class ShareService {
 		}		
 		
 		return (LinkedHashSet<Shares>) recommendShareList;
+	}
+	
+	public Map<Integer, HashMap<Integer,String>> likedShares(Members member){
+		List<Long> fs;
+		List<String> fm;
+		HashMap<Integer,String> likedSharesMap;
+		HashMap<Integer,HashMap<Integer,String>> indexMap = new HashMap<Integer,HashMap<Integer,String>>();
+		fm =  shareRepository.findShareLikingMemberNotDis();
+		System.out.println("fm : " + fm);
+		fs = shareRepository.findLikedSharesNotDis();
+		System.out.println("fs : " + fs);
+		for(int i=0; i<fs.size(); i++){
+			likedSharesMap = new HashMap<Integer,String>();
+			System.out.println(fm.get(i) + " , " + fs.get(i));
+			likedSharesMap.put(1, fm.get(i));
+			likedSharesMap.put(2, String.valueOf(fs.get(i)));
+			indexMap.put(i, likedSharesMap);
+		}
+		return indexMap;
 	}
 
 	public Shares saveShare(Shares share) {

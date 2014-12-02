@@ -76,7 +76,7 @@ public class ShareController {
 	}
 	
 	@RequestMapping(value = "/shareUp.do")
-	public String shareUp(@Valid Shares share, BindingResult result, String items, String group){
+	public String shareUp(@Valid Shares share, BindingResult result, String items, String group, Model model, @ModelAttribute("userInfo")Members member){
 		String [] itemarray = items.split(",");
 		Shares nshare = shareService.saveShare(share);
 		nshare.setGroup(groupService.getGroup(Long.parseLong(group)));
@@ -89,6 +89,7 @@ public class ShareController {
 		}
 		shareService.saveShare(nshare);
 		groupService.updateGroup(groupService.getGroup(Long.parseLong(group)));
+		model.addAttribute("userInfo", memberService.findMember(member.getEmail()));
 		return "redirect:/categoryshare.do?groupId="+group+"&item=all&pageNum=0";
 	}
 	
@@ -153,14 +154,22 @@ public class ShareController {
 			e.printStackTrace();
 		}
 		if(!share.getLikeMembers().isEmpty()){
-		System.out.println(share.getLikeMembers().iterator().next().equals(member));
+			System.out.println(share.getLikeMembers().iterator().next());
+			System.out.println(share.getLikeMembers().iterator().next().equals(member));
 		}
-		System.out.println(member.getLikeShares());
+		System.out.println("mem :" + member.getLikeShares());
+		System.out.println("share :" + share.getLikeMembers());
 		System.out.println(share.getLikeMembers().contains(member));
-		if(!share.getLikeMembers().contains(member)){
+		if(!share.getLikeMembers().contains(member)){			
 			share.addLikeUser(member);
+			share = shareService.saveShare(share);
+			groupService.updateGroup(share.getGroup());
+			System.out.println(member.getMemberGroups());
+			//System.out.println(memberService.updateMember(member).getMemberGroups());
 			model.addAttribute("userInfo", memberService.updateMember(member));
-			//System.out.println(share.getLikeMembers());
+			System.out.println("after : " + member.getMemberGroups());
+			//System.out.println(model.("userInfo"));
+			System.out.println(share.getLikeMembers());
 			share = shareService.saveShare(share);
 			System.out.println(share.getTitle());
 			System.out.println(share.getLikes());

@@ -34,4 +34,10 @@ public interface ShareRepository extends CrudRepository<Shares, Long> {
 	@Query(value="select DISTINCT email from like_shares ls order by email asc", nativeQuery= true)
 	List<String>  findShareLikingMember();
 	
+	@Query(value="select share_id from like_shares ls order by ls.email asc", nativeQuery= true)
+	List<Long>  findLikedSharesNotDis();
+	
+	@Query(value="select email from like_shares ls order by ls.email asc", nativeQuery= true)
+	List<String>  findShareLikingMemberNotDis();
+	
 }
