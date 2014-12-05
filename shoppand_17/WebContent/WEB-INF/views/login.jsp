@@ -36,7 +36,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand goTop" href="#">Griny</a>
+					<a class="brand goTop" href="#">Shoppand</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
 							<c:choose>
@@ -46,12 +46,13 @@
 								</c:when>
 								<c:otherwise>
 									<li class="active"><a href="groupIndex.do">Home</a></li>
-									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">내 쇼핑 탐방<b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
-											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">About Me</a></li>
+											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">내 정보</a></li>
+											<li><a href="recommendShareList.do">나를 위한 추천</a></li>
 										</ul>
 									</li>
-									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">내 그룹 쇼핑<b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
 											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
 												<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
@@ -62,7 +63,7 @@
 								</c:otherwise>
 							</c:choose>
 						</ul>
-					</div>	
+					</div>		
 				</div>	
 			</div>
 		</div>

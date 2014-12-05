@@ -89,6 +89,7 @@ public class ShareController {
 		}
 		shareService.saveShare(nshare);
 		groupService.updateGroup(groupService.getGroup(Long.parseLong(group)));
+		memberService.updateMember(member);
 		model.addAttribute("userInfo", memberService.findMember(member.getEmail()));
 		return "redirect:/categoryshare.do?groupId="+group+"&item=all&pageNum=0";
 	}
@@ -170,7 +171,7 @@ public class ShareController {
 			System.out.println("after : " + member.getMemberGroups());
 			//System.out.println(model.("userInfo"));
 			System.out.println(share.getLikeMembers());
-			share = shareService.saveShare(share);
+			//share = shareService.saveShare(share);
 			System.out.println(share.getTitle());
 			System.out.println(share.getLikes());
 		}
@@ -180,7 +181,6 @@ public class ShareController {
 	
 	@RequestMapping(value="recommendShareList.do")
 	public ModelAndView recommendShareList(@ModelAttribute("userInfo")Members member){
-		
-		return new ModelAndView("test","shares", shareService.recommendShareList(member));
+		return new ModelAndView("userRecomm","shares", shareService.recommendShareList(member));
 	}
 }

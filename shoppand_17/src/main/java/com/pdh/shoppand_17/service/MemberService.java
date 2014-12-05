@@ -38,7 +38,7 @@ public class MemberService {
 		return memberRepository.findOne(email);
 	}
 	
-	public List<Groups> getGroups(String email){
+	public Set<Groups> getGroups(String email){
 		return memberRepository.findByEmail(email).getMemberGroups();
 	}
 

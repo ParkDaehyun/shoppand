@@ -6,7 +6,7 @@
 <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Griny - single & multi page theme</title>
+        <title>Shoppand - 쇼핑공동체</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -36,40 +36,32 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand goTop" href="#">Griny</a>
+					<a class="brand goTop" href="#">Shoppand</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
-							<li><a href="index.jsp">Home</a></li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li class="active"><a href="about.html">About Us</a></li>
-									<li><a href="services.html">Services</a></li>
-									<li><a href="price.html">Price</a></li>
-									<li><a href="login.html">Login</a></li>
-									<li><a href="register.html">Register</a></li>
-									<li><a href="faq.html">F.A.Q.</a></li>
-									<li><a href="contacts.html">Contact</a></li>
-								</ul>
-							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="blog-right.html">Blog right sidebar</a></li>
-									<li><a href="blog-left.html">Blog left sidebar</a></li>
-									<li><a href="blog-full.html">Blog full</a></li>
-									<li class="divider"></li>
-									<li><a href="blog-single.html">Blog single one</a></li>
-									<li><a href="blog-single2.html">Blog single two</a></li>
-								</ul>
-							</li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
-								<ul class="dropdown-menu" role="menu">
-									<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
-									<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
-									</c:forEach>
-								</ul>
-							</li>
-							<li><a href="shortcodes.html">Shortcodes</a>
-							</li>
+							<c:choose>
+								<c:when test="${empty sessionScope.userInfo}">
+									<li class="active"><a href="index.jsp">Home</a></li>
+									<li><a href="loginForm.do">Login</a></li>
+								</c:when>
+								<c:otherwise>
+									<li class="active"><a href="groupIndex.do">Home</a></li>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">내 쇼핑 탐방<b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu">
+											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">내 정보</a></li>
+											<li><a href="recommendShareList.do">나를 위한 추천</a></li>
+										</ul>
+									</li>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">내 그룹 쇼핑<b class="caret"></b></a>
+										<ul class="dropdown-menu" role="menu">
+											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
+												<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
+											</c:forEach>
+										</ul>
+									</li>
+									<li><a href="logout.do">${sessionScope.userInfo.name}님 로그아웃</a></li>
+								</c:otherwise>
+							</c:choose>
 						</ul>
 					</div>	
 				</div>	
@@ -326,18 +318,18 @@
 								<article class="clearfix">
 									<i class="icon-globe"></i>
 									<address>
-										2425 West Boli Blvd. Suite 421.<br/>
-										City, Merils. United States,<br/>
-										Zip Code, 123456.	
+										경기도 성남시 분당구<br/>
+										정자동 불정로 6<br/>
+										NAVER 그린팩토리 9층	
 									</address>
 								</article>
 								<article class="clearfix">
 									<i class="icon-phone"></i>
-									<p>8 417 274 2933</p>
+									<p>010 9270 0024</p>
 								</article>
 								<article class="clearfix">	
 									<i class="icon-envelope"></i>
-									<p><a href="mailto:bootstrap@twitter.com">bootstrap@twitter.com</a></p>
+									<p><a href="mailto:0605pdh@naver.com">0605pdh@naver.com</a></p>
 								</article>	
 							</div>	
 						</div>

@@ -38,7 +38,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand goTop" href="#">Griny</a>
+					<a class="brand goTop" href="#">Shoppand</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
 							<c:choose>
@@ -48,12 +48,13 @@
 								</c:when>
 								<c:otherwise>
 									<li class="active"><a href="groupIndex.do">Home</a></li>
-									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">내 쇼핑 탐방<b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
-											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">About Me</a></li>
+											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">내 정보</a></li>
+											<li><a href="recommendShareList.do">나를 위한 추천</a></li>
 										</ul>
 									</li>
-									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">내 그룹 쇼핑<b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
 											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
 												<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
@@ -77,7 +78,9 @@
 	            <input type="text" class="form-control" id="emailName">
 		             <button class="btn" type="button" id="idSearch">Search</button>
             </form>
-			
+			<div id="alertdiv">
+	         
+	         </div>
         	<div id = "occMem">
                 	<label>Added Members</label>
                 	<c:forEach items="${group.groupMembers}" var="mem">
@@ -109,27 +112,55 @@
 		
 		$("#idSearch").click(function(e){
 			$.ajax({
-				url : "addGroupMember.do",
+				url : "chkGroupMember.do",
 				type : "post",
 				dataType : "text",
 				data : "addmail="+$("#emailName").val() + "&groupId=${group.groupId}",
 				success : function(data){
 					if(data == "1"){
-						alert($("#emailName").val()+"님이 등록되었습니다.");
-						$("#occMem").append($("#emailName").val() + "<br>");
-						//$("#groupMem").append("<input name='groupMembers[${status.index}]' value="+ gmagak +">");
-					}else{
-						alert($("#emailName").val()+"님은 등록할 수 없는 사용자입니다.");
+						$("#alertdiv").empty();
+						$("#alertdiv").append("<div class='alert alert-block alert-error fade in'><button class='close' data-dismiss='alert' type='button'>×</button><h4 class='alert-heading'>존재하지 않는 메일주소입니다.</h4></div>");
 						$("#emailName").val("");
+						//$("#groupMem").append("<input name='groupMembers[${status.index}]' value="+ gmagak +">");
+					}else if(data == "2"){
+						$("#alertdiv").empty();
+						$("#alertdiv").append("<div class='alert alert-block alert-error fade in'><button class='close' data-dismiss='alert' type='button'>×</button><h4 class='alert-heading'>이미 등록된 사용자입니다.</h4></div>");
+						$("#emailName").val("");
+					}else{
+						$("#alertdiv").empty();
+						$("#alertdiv").append("<div class='alert alert-success alert-block fade in'><button class='close' data-dismiss='alert' type='button'>×</button><h4 class='alert-heading'>"+data+"님을 추가하시겠습니까?</h4><p>Change this and that and try again.</p><p><a class='btn' href='javascript:memberaddOk();'>등록하기</a><a class='btn' href='javascript:memberRe();'>회원 다시 검색</a></p></div>");
+						//alert($("#emailName").val()+"님은 등록할 수 없는 사용자입니다.");
+						
+						
 					}
 				},
 				error : function(err){
 					alert("!");
 				}
 			});
-			//alert($("#emailName").val());
+			
 			
 		}); 
+		
+		function memberaddOk(){
+			$.ajax({
+				url : "addGroupMember.do",
+				type : "post",
+				dataType : "text",
+				data : "addmail="+$("#emailName").val() + "&groupId=${group.groupId}",
+				success : function(data){
+					$("#occMem").append(data + "(" + $("#emailName").val() + ") <br>");
+				},
+				error : function(err){
+					alert("오류");
+				}
+			});
+		}
+			
+		function memberRe(){
+			$("#emailName").val("");
+			$("#alertdiv").empty();
+		}
 		//"group="+${group.groupId}+
 		/* $("#duplcheck").click(function(e){
 			$.ajax({

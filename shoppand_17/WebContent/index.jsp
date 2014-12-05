@@ -8,7 +8,7 @@
  <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Griny - single & multi page theme</title>
+        <title>Shoppand - 쇼핑공동체</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -305,18 +305,18 @@
 								<article class="clearfix">
 									<i class="icon-globe"></i>
 									<address>
-										2425 West Boli Blvd. Suite 421.<br/>
-										City, Merils. United States,<br/>
-										Zip Code, 123456.	
+										경기도 성남시 분당구<br/>
+										정자동 불정로 6<br/>
+										NAVER 그린팩토리 9층	
 									</address>
 								</article>
 								<article class="clearfix">
 									<i class="icon-phone"></i>
-									<p>8 417 274 2933</p>
+									<p>010 9270 0024</p>
 								</article>
 								<article class="clearfix">	
 									<i class="icon-envelope"></i>
-									<p><a href="mailto:bootstrap@twitter.com">bootstrap@twitter.com</a></p>
+									<p><a href="mailto:0605pdh@naver.com">0605pdh@naver.com</a></p>
 								</article>	
 							</div>	
 						</div>

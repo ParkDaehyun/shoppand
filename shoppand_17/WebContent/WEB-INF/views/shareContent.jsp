@@ -41,7 +41,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand goTop" href="#">Griny</a>
+					<a class="brand goTop" href="#">Shoppand</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
 							<c:choose>
@@ -51,12 +51,13 @@
 								</c:when>
 								<c:otherwise>
 									<li class="active"><a href="groupIndex.do">Home</a></li>
-									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">내 쇼핑 탐방<b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
-											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">About Me</a></li>
+											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">내 정보</a></li>
+											<li><a href="recommendShareList.do">나를 위한 추천</a></li>
 										</ul>
 									</li>
-									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">내 그룹 쇼핑<b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
 											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
 												<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
@@ -67,7 +68,7 @@
 								</c:otherwise>
 							</c:choose>
 						</ul>
-					</div>	
+					</div>		
 				</div>	
 			</div>
 		</div>		
@@ -93,7 +94,7 @@
 							<div class="img-wrap pull-right span6" style="overflow:visible; max-height:100%;">
 								<img id="shareImg" src="images/shareImgs/${share.imgName}" alt=""/>
 								<c:forEach var="inlist" items="${share.items}" begin="0" step="1">
-									<div style="position:absolute; top:${inlist.ypos}%; left:${inlist.xpos}%;" >
+									<div style="position:absolute; top:${inlist.ypos-1}%; left:${inlist.xpos-1}%;" >
 									<%-- data-placement="popfunc(${inlist.xpos},${inlist.ypos});" --%>
 									<%-- '<c:choose><c:when test='${inlist.ypos} lt 20'>bottom</c:when><c:when test='${inlist.xpos} lt 20'>right</c:when><c:when test='${inlist.xpos} gt 80'>left</c:when><c:otherwise>top</c:otherwise></c:choose>' --%>
 										<a data-content="<a href='${inlist.link}' target=_blank>${inlist.price}원</a>" data-html="true" title="" data-placement="top" data-toggle="popover" rel="popover" data-original-title="${inlist.itemName}" >
@@ -192,7 +193,6 @@
 										<button id="replySM" class="btn pull-right margin-top-15">Send</button>
 									</form>
 								</div>	
-								<div class="span3"><button class="btn btn-large btn-warning" onclick="likeUp(${share.shareId});">추천</button></div>
 							</div>
 						</div>	
 					</div>	
@@ -206,12 +206,10 @@
 				<div class="container">
 					<div class="row-fluid">
 						<div class="span9">
-							<h3>Want to get started?</h3>
-							<h4>Nullam iaculis dictum ullamcorper. In vitae pellentesque massa. Vivamus viverra libero dapibus, sodales lectus a, consectetur ante.</h4>
+							<h3>이 게시물이 마음에 드나요?</h3>
+							<h4>그렇다면 추천을 눌러주세요</h4>
 						</div>
-						<div class="span3">
-							<a class="btn btn-large" href="#">Contact us</a>
-						</div>
+						<div class="span3"><button class="btn btn-large btn-warning" onclick="likeUp(${share.shareId});">추천</button></div>
 					</div>
 				</div>
 			</div>
@@ -227,18 +225,18 @@
 								<article class="clearfix">
 									<i class="icon-globe"></i>
 									<address>
-										2425 West Boli Blvd. Suite 421.<br/>
-										City, Merils. United States,<br/>
-										Zip Code, 123456.	
+										경기도 성남시 분당구<br/>
+										정자동 불정로 6<br/>
+										NAVER 그린팩토리 9층	
 									</address>
 								</article>
 								<article class="clearfix">
 									<i class="icon-phone"></i>
-									<p>8 417 274 2933</p>
+									<p>010 9270 0024</p>
 								</article>
 								<article class="clearfix">	
 									<i class="icon-envelope"></i>
-									<p><a href="mailto:bootstrap@twitter.com">bootstrap@twitter.com</a></p>
+									<p><a href="mailto:0605pdh@naver.com">0605pdh@naver.com</a></p>
 								</article>	
 							</div>	
 						</div>

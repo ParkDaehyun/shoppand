@@ -13,14 +13,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+
+
 @Entity
 @Table(name = "Members")
 public class Members {
-
 	@Id
 	@Column(name = "email")
 	private String email;
@@ -49,9 +51,8 @@ public class Members {
     @NotNull
     private String profileImg;
 	
-	
 	@ManyToMany(mappedBy = "groupMembers", fetch=FetchType.EAGER)
-	private List<Groups> memberGroups = new ArrayList<Groups>();
+	private Set<Groups> memberGroups = new LinkedHashSet<Groups>();
 	
 	@OneToMany
 	@JoinColumn(name = "email", nullable = false)
@@ -59,8 +60,8 @@ public class Members {
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "LIKE_SHARES",
-			joinColumns=@JoinColumn(name="email"),
-			inverseJoinColumns=@JoinColumn(name="shareId"))
+			joinColumns=@JoinColumn(name="like_email"),
+			inverseJoinColumns=@JoinColumn(name="like_share_id"))
 	private Set<Shares> likeShares = new LinkedHashSet<Shares>();
 	
 	/*
@@ -92,7 +93,7 @@ public class Members {
 		this.email = email;
 	}
 
-
+	
 
 	public String getPassword() {
 		return password;
@@ -153,13 +154,13 @@ public class Members {
 	}
 	
 	
-	public List<Groups> getMemberGroups() {
+	public Set<Groups> getMemberGroups() {
 		return memberGroups;
 	}
 
 
 
-	public void setMemberGroups(List<Groups> memberGroups) {
+	public void setMemberGroups(Set<Groups> memberGroups) {
 		this.memberGroups = memberGroups;
 	}
 

@@ -88,7 +88,8 @@ public class MemberController {
 		String url = "redirect:/groupIndex.do";
 		try{
 			memberService.login(email, password);
-			model.addAttribute("userInfo", memberService.findMember(email));
+			Members findMember = memberService.findMember(email);
+			model.addAttribute("userInfo", findMember);
 		}catch(Exception e){
 			System.out.println("err");
 			url = "login";

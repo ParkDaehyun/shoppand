@@ -1,7 +1,9 @@
 package com.pdh.shoppand_17.model.entity;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -49,9 +52,9 @@ public class Groups {
 	//@OneToMany(mappedBy = "group")
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "GROUP_MEMBERS",
-			joinColumns=@JoinColumn(name="group_Id"),
+			joinColumns=@JoinColumn(name="group_id"),
 			inverseJoinColumns=@JoinColumn(name="user_email"))
-	private List<Members> groupMembers = new ArrayList<Members>();
+	private Set<Members> groupMembers = new LinkedHashSet<Members>();
 
 	@OneToMany(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
@@ -92,11 +95,11 @@ public class Groups {
 		this.groupDate = groupDate;
 	}
 
-	public List<Members> getGroupMembers() {
+	public Set<Members> getGroupMembers() {
 		return groupMembers;
 	}
 
-	public void setGroupMembers(List<Members> groupMembers) {
+	public void setGroupMembers(Set<Members> groupMembers) {
 		this.groupMembers = groupMembers;
 	}
 

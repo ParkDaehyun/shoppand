@@ -65,7 +65,7 @@ public class GroupController {
 		return gson.toJson(hm);
 	}
 	
-	@RequestMapping(value = "/groupadd.do", produces="text/plain;charset=UTF-8")
+	@RequestMapping(value = "/groupadd.do")
 	public String addGroup(@Valid Groups group, BindingResult result, Model model, @ModelAttribute("userInfo")Members member){
 		try{
 			Groups ngroup = groupService.addGroup(group);
@@ -89,48 +89,31 @@ public class GroupController {
 		return "aboutGroup";
 	}*/
 	
-	@RequestMapping(value = "/chkGroupMember.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/chkGroupMember.do", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String chkGroupMember(String addmail, Long groupId){
 		String msg = "1";
-		Members mem = memberService.findMember(addmail);
-		System.out.println(mem);
-		System.out.println(addmail);
-		//System.out.println(groupname);
-		System.out.println(groupService.getGroup(groupId).getGroupMembers());
-		System.out.println(mem.getMemberGroups());
-		if(mem instanceof Members){/*
-			groupService.findGroup(groupname).addGroupMember(mem);
-			System.out.println(mem.getMemberGroups());
-			System.out.println(groupService.findGroup(groupname).getGroupMembers());*/
-			
-		}else{
-			msg = "2";
+		Groups group = groupService.getGroup(groupId);
+		if(memberService.findMember(addmail) instanceof Members ){
+			if(group.hasMember(memberService.findMember(addmail))){
+				msg = "2";
+			}else{
+				msg = memberService.findMember(addmail).getName();
+			}			
 		}
 		return msg;
 	}
 	
-	@RequestMapping(value = "/addGroupMember.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/addGroupMember.do", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
 	@ResponseBody
 	public String addGroupMember(Long groupId, String addmail){
 		String msg = "1";
 		Groups group = groupService.getGroup(groupId);
-		if(memberService.findMember(addmail) instanceof Members ){
-			try{
-				if(group.hasMember(memberService.findMember(addmail))){
-					msg = "2";
-				}else{
-					group.addGroupMember(memberService.findMember(addmail));
-					groupService.updateGroup(group);
-					memberService.updateMember(memberService.findMember(addmail));
-				}
-				//System.out.println(member.getMemberGroups());
-			}catch(Exception e){
-				msg = "2";
-			}
-		}else{
-			msg = "2";
-		}
+		group.addGroupMember(memberService.findMember(addmail));
+		groupService.updateGroup(group);
+		memberService.updateMember(memberService.findMember(addmail));
+		msg = memberService.findMember(addmail).getName();
+				
 		return msg;
 	}
 	

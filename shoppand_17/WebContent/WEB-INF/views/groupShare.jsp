@@ -36,7 +36,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand goTop" href="#">Griny</a>
+					<a class="brand goTop" href="#">Shoppand</a>
 					<div class="nav-collapse pull-right">
 						<ul class="nav">
 							<c:choose>
@@ -46,12 +46,13 @@
 								</c:when>
 								<c:otherwise>
 									<li class="active"><a href="groupIndex.do">Home</a></li>
-									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages  <b class="caret"></b></a>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">내 쇼핑 탐방<b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
-											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">About Me</a></li>
+											<li><a href="aboutUser.do?user=${sessionScope.userInfo.email}">내 정보</a></li>
+											<li><a href="recommendShareList.do">나를 위한 추천</a></li>
 										</ul>
 									</li>
-									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">My groups <b class="caret"></b></a>
+									<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" class="sessionCheck">내 그룹 쇼핑<b class="caret"></b></a>
 										<ul class="dropdown-menu" role="menu">
 											<c:forEach items="${sessionScope.userInfo.memberGroups}" var="groups">
 												<li><a href="categoryshare.do?groupId=${groups.groupId}&item=all&pageNum=0">${groups.groupName}</a></li>
@@ -143,12 +144,12 @@
 							</div>
 						</div>
 						<div class="span3">
-							<form class="form">
+							<!-- <form class="form">
 								<div class="controls controls-row search-row">
 									<input class="input-block-level" type="text" placeholder="Search">
 									<button class="btn" type="button"><i class="icon-search"></i></button>
 								</div>
-							</form>
+							</form> -->
 							<article>
 								<h4 class="with-border">Categories</h4>
 								<ul class="unstyled link-list">
@@ -173,13 +174,13 @@
 									<a href="#" class="tag btn btn-primary">JavaScript</a>
 								</ul>
 							</article>	
-							<article class="section">
+							<!-- <article class="section">
 								<h4 class="with-border">Featured video</h4>
 								<div class="videoWrapper">
 									<iframe src="http://player.vimeo.com/video/20596477?color=39ae77" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 								</div>
-							</article>	
-							<article class="section">
+							</article>	 -->
+							<!-- <article class="section">
 								<h4 class="with-border">Popular Photos</h4>
 								<ul class="footer-thumbnails unstyled clearfix">
 									<li class="stream">
@@ -223,7 +224,7 @@
 										</a>
 									</li>
 								</ul>
-							</article>	
+							</article>	 -->
 							<article class="section">
 								<h4 class="with-border">Recent Comments</h4>
 								<ul class="media-list">
@@ -234,7 +235,7 @@
 										</a>
 										<div class="media-body">
 											<h5>
-												<a href="#">${reply.member.name}</a>
+												<a href="aboutUser.do?user=${reply.member.email}">${reply.member.name}</a>
 												in
 												<a href="sharecontent.do?shareId=${reply.share.shareId}">${reply.share.title}</a>
 											</h5>
@@ -271,10 +272,7 @@
 									</li> -->
 								</ul>
 							</article>	
-							<article class="section">
-								<h4 class="with-border">Text Widget</h4>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ac interdum ligula. Nullam iaculis dictum ullamcorper. In vitae pellentesque massa. Vivamus viverra libero dapibus, sodales lectus a, consectetur ante. </p>
-							</article>	
+							
 						</div>
 					</div>
 					</c:otherwise>
@@ -307,7 +305,7 @@
 												<img src="images/profileImgs/${g.profileImg}" alt=""/>
 											</div>	
 											<h3 class="with-border"><a href="aboutUser.do?user=${g.email}">${g.name}</a> <small class="color">- 그룹장</small></h3>
-											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
+											<p>${g.email}</p>
 										</div>	
 									</li>
 									</c:when>
@@ -329,7 +327,7 @@
 												<img src="images/profileImgs/${g.profileImg}" alt=""/>
 											</div>	
 											<h3 class="with-border"><a href="aboutUser.do?user=${g.email}">${g.name}</a>  <small class="color">- 그룹원</small></h3>
-											<p>Pellentesque ornare, risus et vulputate mollis, massa nulla aliquam neque, sed hendrerit orci quam eget ante.</p>
+											<p>${g.email}</p>
 										</div>	
 									</li>
 									</c:otherwise>
@@ -368,18 +366,18 @@
 								<article class="clearfix">
 									<i class="icon-globe"></i>
 									<address>
-										2425 West Boli Blvd. Suite 421.<br/>
-										City, Merils. United States,<br/>
-										Zip Code, 123456.	
+										경기도 성남시 분당구<br/>
+										정자동 불정로 6<br/>
+										NAVER 그린팩토리 9층	
 									</address>
 								</article>
 								<article class="clearfix">
 									<i class="icon-phone"></i>
-									<p>8 417 274 2933</p>
+									<p>010 9270 0024</p>
 								</article>
 								<article class="clearfix">	
 									<i class="icon-envelope"></i>
-									<p><a href="mailto:bootstrap@twitter.com">bootstrap@twitter.com</a></p>
+									<p><a href="mailto:0605pdh@naver.com">0605pdh@naver.com</a></p>
 								</article>	
 							</div>	
 						</div>

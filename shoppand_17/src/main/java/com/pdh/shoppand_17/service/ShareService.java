@@ -3,6 +3,7 @@ package com.pdh.shoppand_17.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,7 +130,7 @@ public class ShareService {
 		int otherIndex = 0;
 		//List<String> scrapUrlList;
 		//Set<Shares> memberLikeList;
-		List<Long> likedShareIdList;
+		List<BigInteger> likedShareIdList;
 		
 		//Set<String> scrapEmailList;
 		List<String> likingMemberEmailList;
@@ -187,7 +188,7 @@ public class ShareService {
 		for (int i = 0; i < likedSharesMap.size(); i++) {
 			if (likedSharesMap.get(i).get(1).equals(member.getEmail())) {
 				System.out.println("me : "+ likedSharesMap.get(i).get(1));
-				userIndex = el.indexOf(member.getEmail());
+				userIndex = el.indexOf(likedSharesMap.get(i).get(1));
 				user[ul.indexOf(likedSharesMap.get(i).get(2))] = 1;
 			} else {
 				System.out.println("other : "+ likedSharesMap.get(i).get(1));
@@ -200,14 +201,21 @@ public class ShareService {
 				}
 			}
 		}
-		
+		for (int i = 0; i < user.length; i++) {
+			System.out.println(user[i] + " ");
+		}
+		for (int i = 0; i < data[0].length; i++) {
+			System.out.println(data[0][i] + " ");
+		}
 		recommend = cf.cal(user, data);
 		for (int i = 0; i < data[0].length; i++) {
 			System.out.print(recommend[i] + " ");
 		}
 		for (int i = 0; i < data[0].length; i++) {
 			if (recommend[i] == 1) {
-				recommendShareList.add(shareRepository.findOne(likedShareIdList.get(i)));
+				BigInteger lg = likedShareIdList.get(i);
+				Shares sh = shareRepository.findOne(lg.longValue());
+				recommendShareList.add(sh);
 			}
 		}		
 		

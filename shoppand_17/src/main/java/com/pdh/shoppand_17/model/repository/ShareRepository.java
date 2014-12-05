@@ -1,5 +1,6 @@
 package com.pdh.shoppand_17.model.repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
@@ -28,16 +29,18 @@ public interface ShareRepository extends CrudRepository<Shares, Long> {
 
 	List<Shares> findByLikesGreaterThan(int likes);
 	
-	@Query(value="select DISTINCT share_id from like_shares ls order by share_id asc", nativeQuery= true)
-	List<Long>  findLikedShares();
+	List<Shares> findTop6ByLikes(int likes);
 	
-	@Query(value="select DISTINCT email from like_shares ls order by email asc", nativeQuery= true)
+	@Query(value="select DISTINCT like_share_id from like_shares ls order by like_share_id asc", nativeQuery= true)
+	List<BigInteger>  findLikedShares();
+	
+	@Query(value="select DISTINCT like_email from like_shares ls order by like_email asc", nativeQuery= true)
 	List<String>  findShareLikingMember();
 	
-	@Query(value="select share_id from like_shares ls order by ls.email asc", nativeQuery= true)
+	@Query(value="select like_share_id from like_shares ls order by ls.like_email asc", nativeQuery= true)
 	List<Long>  findLikedSharesNotDis();
 	
-	@Query(value="select email from like_shares ls order by ls.email asc", nativeQuery= true)
+	@Query(value="select like_email from like_shares ls order by ls.like_email asc", nativeQuery= true)
 	List<String>  findShareLikingMemberNotDis();
 	
 }
